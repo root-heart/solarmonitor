@@ -1,17 +1,18 @@
 package com.dkai.solarmonitor.powerdata;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
 
 @Service
 public class PowerDataService {
     @Autowired
-    private JpaRepository<PowerData, Long> powerDataRepository;
+    private PowerDataRepository powerDataRepository;
 
     public PowerData read(long id) {
         return powerDataRepository.getOne(id);
@@ -31,5 +32,11 @@ public class PowerDataService {
 
     private BigDecimal parseValue(String s) {
         return BigDecimal.valueOf(Integer.valueOf(s, 16), 2);
+    }
+
+    public List<PowerData> getSummaryForDay(LocalDate day) {
+        LocalDateTime start = day.atStartOfDay();
+        LocalDateTime end = day.plusDays(1).atStartOfDay();
+        return powerDataRepository.getByDateTimeBetween(start, end);
     }
 }
