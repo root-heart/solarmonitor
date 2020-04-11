@@ -12,14 +12,4 @@ public class SolarMonitorApplication {
     public static void main(String[] args) {
         SpringApplication.run(SolarMonitorApplication.class, args);
     }
-
-    @Bean
-    public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-
-        dataSource.setDriverClassName("org.h2.Driver");
-        dataSource.setUrl("jdbc:h2:~/solarmonitor");
-
-        return dataSource;
-    }
 }
