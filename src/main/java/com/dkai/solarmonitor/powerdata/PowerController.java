@@ -1,6 +1,6 @@
 package com.dkai.solarmonitor.powerdata;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/power")
+@RequiredArgsConstructor
 public class PowerController {
 
-    @Autowired
-    private PowerDataService powerDataService;
+    private final PowerDataService powerDataService;
 
     @GetMapping("/{id}")
     public PowerData get(@PathVariable Long id) {

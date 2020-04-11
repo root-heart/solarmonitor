@@ -1,6 +1,6 @@
 package com.dkai.solarmonitor.powerdata;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -10,9 +10,9 @@ import java.time.ZoneOffset;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PowerDataService {
-    @Autowired
-    private PowerDataRepository powerDataRepository;
+    private final PowerDataRepository powerDataRepository;
 
     public PowerData read(long id) {
         return powerDataRepository.getOne(id);
