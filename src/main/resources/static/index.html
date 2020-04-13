@@ -1,0 +1,54 @@
+<html>
+<head>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+</head>
+<body>
+<canvas id="myChart" width="300" height="200" style="width: 1000px"></canvas>
+</body>
+</html>
+
+<script>
+
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            let summaryData = JSON.parse(this.responseText);
+
+            let pvPower = []
+            let batteryVolt = [];
+            let loadPower = [];
+            summaryData.forEach(element => pvPower.push({x: element.dateTime, y: element.solarPower}));
+            summaryData.forEach(element => batteryVolt.push({x: element.dateTime, y: element.batteryVoltage}));
+            summaryData.forEach(element => loadPower.push({x: element.dateTime, y: element.loadPower}));
+
+            console.log(pvPower);
+            console.log(batteryVolt);
+            console.log(loadPower);
+
+            let ctx = document.getElementById('myChart').getContext('2d');
+            let myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [
+                        {label: 'PV Power', data: pvPower},
+                        {label: 'Battery Volt', data: batteryVolt},
+                        {label: 'Load Power', data: loadPower}
+                    ]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+
+        }
+    };
+    xhttp.open("GET", "/summary/day/2020-04-13", true);
+    xhttp.send();
+
+</script>
