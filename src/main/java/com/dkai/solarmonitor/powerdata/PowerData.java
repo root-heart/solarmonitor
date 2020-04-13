@@ -23,4 +23,21 @@ public class PowerData {
     private BigDecimal batteryVoltage;
     private BigDecimal batteryCurrent;
     private BigDecimal batteryPower;
+
+    private BigDecimal loadVoltage;
+    private BigDecimal loadCurrent;
+    private BigDecimal loadPower;
+
+    private BigDecimal maximumInputVoltageToday;
+    private BigDecimal minimumInputVoltageToday;
+    private BigDecimal maximumBatteryVoltageToday;
+    private BigDecimal minimumBatteryVoltageToday;
+    private BigDecimal consumedEnergyToday;
+    private BigDecimal consumedEnergyThisMonth;
+    private BigDecimal consumedEnergyThisYear;
+    private BigDecimal totalConsumedEnergy;
+    private BigDecimal generatedEnergyToday;
+    private BigDecimal generatedEnergyThisMonth;
+    private BigDecimal generatedEnergyThisYear;
+    private BigDecimal totalGeneratedEnergy;
 }

@@ -17,6 +17,8 @@ public class PowerController {
 
     private final PowerDataService powerDataService;
 
+    private final ChargeControllerRegisterConverter chargeControllerRegisterConverter;
+
     @GetMapping("/{id}")
     public PowerData get(@PathVariable @NonNull Long id) {
         return powerDataService.read(id);
@@ -28,8 +30,8 @@ public class PowerController {
     }
 
     @PostMapping
-    public PowerData postPowerData(@RequestBody PowerDataDto powerData) {
-        return powerDataService.savePowerData(powerData);
+    public PowerData postPowerData(@RequestBody ChargeControllerRegistersDto dto) {
+        return powerDataService.savePowerData(chargeControllerRegisterConverter.convert(dto));
     }
 
 }

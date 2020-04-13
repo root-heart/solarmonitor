@@ -20,8 +20,7 @@ class PowerDataSummarySpec extends Specification {
         def client = new RESTClient("http://localhost:$port", ContentType.JSON)
 
         when: 'different data is added for different days'
-        client.post(path: '/power',
-                body: powerData(1586607377, "01041012EB00951C3B0000051B02291C3B0000F516"))
+        client.post(path: '/power', body: powerData)
 
         and: 'the summary for April 11 2020 is fetched'
         def result = client.get(path: '/summary/day/2020-04-11') as HttpResponseDecorator
@@ -40,11 +39,12 @@ class PowerDataSummarySpec extends Specification {
         result.responseData[0].batteryPower == new BigDecimal("72.27")
     }
 
-    static powerData(long secondsSince1970, String currentPowerData) {
+    static String powerData =
         """{
-                "secondsSince1970": $secondsSince1970,
-                "currentPowerData": "$currentPowerData",
-                "historicalPowerData": "" 
+                "secondsSince1970": 1586607377,
+                "registers3100To3107": "01041012EB00951C3B0000051B02291C3B0000F516",
+                "registers310cTo3111": "01040C04FD002101A5000009790AF82927",
+                "registers3300To330b": "010418159E0002052C04C4001A0000039C00000776000013D400006335",
+                "registers330cTo3313": "010410000E000003FF000008B800001707000061E3"
             }"""
-    }
 }
