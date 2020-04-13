@@ -21,7 +21,7 @@ create table power_data
     consumed_energy_this_year     numeric(10, 2),
     total_consumed_energy         numeric(10, 2),
     generated_energy_today        numeric(10, 2),
-    generated_energy_thisMonth    numeric(10, 2),
-    generated_energy_thisYear     numeric(10, 2),
+    generated_energy_this_month   numeric(10, 2),
+    generated_energy_this_year    numeric(10, 2),
     total_generated_energy        numeric(10, 2)
 );
