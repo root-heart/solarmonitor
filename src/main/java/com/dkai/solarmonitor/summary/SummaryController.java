@@ -1,4 +1,4 @@
-package com.dkai.solarmonitor.powerdata;
+package com.dkai.solarmonitor.summary;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,11 +14,11 @@ import java.util.List;
 @RequestMapping("/summary")
 @RequiredArgsConstructor
 public class SummaryController {
-    private final PowerDataService powerDataService;
+    private final SummaryService summaryService;
 
     @GetMapping("/day/{day}")
-    public List<PowerData> getForDay(
+    public List<SummaryData> getForDay(
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate day) {
-        return powerDataService.getSummaryForDay(day);
+        return summaryService.getForDay(day);
     }
 }
