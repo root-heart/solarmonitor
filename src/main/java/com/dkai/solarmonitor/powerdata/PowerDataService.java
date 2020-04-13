@@ -19,6 +19,7 @@ public class PowerDataService {
     }
 
     public PowerData savePowerData(PowerDataDto dto) {
+        // TODO add unit test for this stuff
         PowerData powerData = new PowerData();
         powerData.setDateTime(LocalDateTime.ofEpochSecond(dto.getSecondsSince1970(), 0, ZoneOffset.UTC));
         powerData.setSolarVoltage(parseValue(dto.getCurrentPowerData().substring(6, 10)));
@@ -38,5 +39,9 @@ public class PowerDataService {
         LocalDateTime start = day.atStartOfDay();
         LocalDateTime end = day.plusDays(1).atStartOfDay();
         return powerDataRepository.getByDateTimeBetween(start, end);
+    }
+
+    public void delete(long id) {
+        powerDataRepository.deleteById(id);
     }
 }

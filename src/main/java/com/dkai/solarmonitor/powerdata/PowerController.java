@@ -1,6 +1,8 @@
 package com.dkai.solarmonitor.powerdata;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,8 +18,13 @@ public class PowerController {
     private final PowerDataService powerDataService;
 
     @GetMapping("/{id}")
-    public PowerData get(@PathVariable Long id) {
+    public PowerData get(@PathVariable @NonNull Long id) {
         return powerDataService.read(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable @NonNull Long id) {
+        powerDataService.delete(id);
     }
 
     @PostMapping
