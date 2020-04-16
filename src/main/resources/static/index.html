@@ -1,15 +1,27 @@
 <html>
 <head>
+    <link rel="stylesheet" href="css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <!--    <script src="https://d3js.org/d3.v4.min.js"></script>-->
+    <script src="js/raphael.min.js"></script>
+    <script src="js/justgage.js"></script>
 </head>
-<body style="background-color: #333">
-<div style="position: relative; width: 1200px; height: 400px; margin-bottom: 100px;">
-    <canvas id="powerChart" width="3" height="1" style="width: 1000px"></canvas>
+<body style="background-color: #303030">
+
+<div class="grid-container">
+    <div id="solar_gauge" class="grid-item"></div>
+    <div id="battery_gauge" class="grid-item"></div>
+    <div id="load_gauge" class="grid-item"></div>
+    <div style="grid-column-start: 1; grid-column-end: 4" class="grid-item">
+        <canvas id="powerChart" width="3" height="1"></canvas>
+    </div>
+    <div style="grid-column-start: 1; grid-column-end: 4" class="grid-item">
+        <canvas id="batteryChart" width="3" height="1"></canvas>
+    </div>
 </div>
-<div style="position: relative; width: 1200px; height: 400px">
-    <canvas id="batteryChart" width="3" height="1" style="width: 1000px"></canvas>
-</div>
+
+
 
 <script>
     Chart.defaults.global.defaultFontColor = '#bbb'
@@ -57,6 +69,7 @@
                             borderWidth: 0,
                             pointRadius: 1,
                             backgroundColor: 'rgba(250, 120, 0, 0.3)',
+                            pointHoverRadius: 15
                         },
                         {
                             label: 'Avg PV Power',
@@ -65,6 +78,7 @@
                             borderColor: 'rgba(250, 120, 0, 1)',
                             borderWidth: 3,
                             pointRadius: 1,
+                            pointHoverRadius: 15
                         },
                         {
                             label: 'Max PV Power',
@@ -74,6 +88,7 @@
                             borderWidth: 0,
                             pointRadius: 1,
                             backgroundColor: 'rgba(250, 120, 0, 0.3)',
+                            pointHoverRadius: 15
                         },
                         {
                             label: 'Min Load Power',
@@ -191,6 +206,84 @@
     };
     xhttp.open("GET", "/summary/day/2020-04-13", true);
     xhttp.send();
+
+    let solarGauge = new JustGage({
+        id: "solar_gauge",
+        value: 375.4256,
+        gaugeColor: "#555",
+        valueFontColor: "#bbb",
+        levelColors: ["#0d0"],
+        decimals: 2,
+        symbol: "W",
+        hideMinMax: true,
+        min: 0,
+        max: 700,
+        label: "Solar Power"
+    });
+
+    let batteryGauge = new JustGage({
+        id: "battery_gauge",
+        value: 13.3756486,
+        gaugeColor: "#555",
+        valueFontColor: "#bbb",
+        decimals: 2,
+        symbol: "V",
+        hideMinMax: true,
+        min: 10,
+        max: 16,
+        customSectors: {
+            ranges: [{
+                color: "#d00",
+                lo: 10,
+                hi: 11
+            }, {
+                color: "#dd0",
+                lo: 11,
+                hi: 11.5
+            }, {
+                color: "#0d0",
+                lo: 11.5,
+                hi: 14.5
+            }, {
+                color: "#dd0",
+                lo: 14.5,
+                hi: 15
+            }, {
+                color: "#d00",
+                lo: 15,
+                hi: 16
+            }]
+        },
+        label: "Battery Voltage"
+    });
+
+    let loadGauge = new JustGage({
+        id: "load_gauge",
+        value: 156.73,
+        gaugeColor: "#555",
+        valueFontColor: "#bbb",
+        decimals: 2,
+        symbol: "W",
+        hideMinMax: true,
+        min: 0,
+        max: 400,
+        customSectors: {
+            ranges: [{
+                color: "#0d0",
+                lo: 0,
+                hi: 200
+            }, {
+                color: "#dd0",
+                lo: 200,
+                hi: 300
+            }, {
+                color: "#d00",
+                lo: 300,
+                hi: 400
+            }]
+        },
+        label: "Load Power"
+    });
 
 </script>
 </body>

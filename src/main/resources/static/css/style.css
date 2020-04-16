@@ -1,0 +1,5 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: 300px 300px 300px;
+    grid-template-rows: 200px 300px 300px;
+}
