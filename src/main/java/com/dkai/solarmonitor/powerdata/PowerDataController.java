@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/power")
+@RequestMapping("/powerData")
 @RequiredArgsConstructor
-public class PowerController {
+public class PowerDataController {
 
     private final PowerDataService powerDataService;
 
     private final ChargeControllerRegisterConverter chargeControllerRegisterConverter;
 
-    @GetMapping("/{id}")
-    public PowerData get(@PathVariable @NonNull Long id) {
-        return powerDataService.read(id);
+    @GetMapping
+    public PowerData getCurrentPowerData() {
+        return powerDataService.getCurrentPowerData();
     }
 
     @DeleteMapping("/{id}")

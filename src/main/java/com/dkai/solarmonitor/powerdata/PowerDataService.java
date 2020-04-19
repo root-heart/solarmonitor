@@ -13,8 +13,8 @@ import java.util.List;
 public class PowerDataService {
     private final PowerDataRepository powerDataRepository;
 
-    public PowerData read(long id) {
-        return powerDataRepository.getOne(id);
+    public PowerData getCurrentPowerData() {
+        return powerDataRepository.findLatest();
     }
 
     public PowerData savePowerData(PowerData powerData) {
