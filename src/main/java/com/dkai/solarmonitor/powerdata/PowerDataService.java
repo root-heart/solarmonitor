@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -25,10 +23,8 @@ public class PowerDataService {
         return BigDecimal.valueOf(Integer.valueOf(s, 16), 2);
     }
 
-    public List<PowerData> getSummaryForDay(LocalDate day) {
-        LocalDateTime start = day.atStartOfDay();
-        LocalDateTime end = day.plusDays(1).atStartOfDay();
-        return powerDataRepository.getByDateTimeBetween(start, end);
+    public List<PowerData> getPowerDataForLast24Hours() {
+        return powerDataRepository.getDataOfLast24Hours();
     }
 
     public void delete(long id) {

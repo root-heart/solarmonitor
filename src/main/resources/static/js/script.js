@@ -1,230 +1,13 @@
-function getData(path, successCallback) {
+function loadAndDisplayData(path, displayCallback) {
     let request = new XMLHttpRequest();
     request.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
             let data = JSON.parse(this.responseText);
-            successCallback(data);
+            displayCallback(data);
         }
     }
     request.open("GET", path, true);
     request.send();
-}
-
-function drawSolarSummaryChart(summaryData) {
-    let minPvPower = []
-    let avgPvPower = []
-    let maxPvPower = []
-    summaryData.forEach(function (element) {
-        minPvPower.push({x: element.end, y: element.minSolarPower});
-        avgPvPower.push({x: element.end, y: element.avgSolarPower});
-        maxPvPower.push({x: element.end, y: element.maxSolarPower});
-    });
-
-    let ctx = document.getElementById('solarPowerChart').getContext('2d');
-    let powerChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: [moment().toDate(), moment().add(-1, 'd').toDate()],
-            datasets: [
-                {
-                    label: undefined, // 'Min PV Power',
-                    data: minPvPower,
-                    fill: false,
-                    borderColor: 'rgba(0, 0, 0, 0)',
-                    borderWidth: 0,
-                    pointRadius: 1,
-                    backgroundColor: 'rgba(250, 120, 0, 0.3)',
-                    pointHoverRadius: 15
-                },
-                {
-                    label: undefined, // 'Avg PV Power',
-                    data: avgPvPower,
-                    fill: false,
-                    borderColor: 'rgba(250, 120, 0, 1)',
-                    borderWidth: 3,
-                    pointRadius: 1,
-                    pointHoverRadius: 15
-                },
-                {
-                    label: undefined, //'Max PV Power',
-                    data: maxPvPower,
-                    fill: 0,
-                    borderColor: 'rgba(0, 0, 0, 0)',
-                    borderWidth: 0,
-                    pointRadius: 1,
-                    backgroundColor: 'rgba(250, 120, 0, 0.3)',
-                    pointHoverRadius: 15
-                }
-            ]
-        },
-        options: {
-            legend: {
-                display: false
-            },
-            scales: {
-                xAxes: [{
-                    type: 'time',
-                    time: {unit: 'hour'}
-                }],
-                yAxes: [{
-                    type: 'linear',
-                    display: true,
-                    position: 'left',
-                    id: 'y-axis-1',
-                    ticks: {beginAtZero: true},
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'Power in Watts'
-                    }
-                }],
-            }
-        }
-    });
-}
-
-function drawSummaryCharts(summaryData) {
-    drawSolarSummaryChart(summaryData);
-
-    let minLoadPower = [];
-    let avgLoadPower = [];
-    let maxLoadPower = [];
-    let minBatteryVolt = [];
-    let avgBatteryVolt = [];
-    let maxBatteryVolt = [];
-
-    summaryData.forEach(function (element) {
-        minLoadPower.push({x: element.end, y: element.minLoadPower});
-        avgLoadPower.push({x: element.end, y: element.avgLoadPower});
-        maxLoadPower.push({x: element.end, y: element.maxLoadPower});
-        minBatteryVolt.push({x: element.end, y: element.minBatteryVoltage});
-        avgBatteryVolt.push({x: element.end, y: element.avgBatteryVoltage});
-        maxBatteryVolt.push({x: element.end, y: element.maxBatteryVoltage});
-    });
-
-    let ctx = document.getElementById('loadPowerChart').getContext('2d');
-    let powerChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: [moment().toDate(), moment().add(-1, 'd').toDate()],
-            datasets: [
-                {
-                    label: 'Min Load Power',
-                    data: minLoadPower,
-                    fill: false,
-                    borderColor: 'rgba(0, 0, 0, 0)',
-                    borderWidth: 0,
-                    pointRadius: 1,
-                    backgroundColor: 'rgba(120, 0, 250, 0.3)',
-                },
-                {
-                    label: 'Avg Load Power',
-                    data: avgLoadPower,
-                    fill: false,
-                    borderColor: 'rgba(120, 0, 250, 1)',
-                    borderWidth: 3,
-                    pointRadius: 1,
-                },
-                {
-                    label: 'Max Load Power',
-                    data: maxLoadPower,
-                    fill: 3,
-                    borderColor: 'rgba(0, 0, 0, 0)',
-                    borderWidth: 0,
-                    pointRadius: 1,
-                    backgroundColor: 'rgba(120, 0, 250, 0.3)',
-                },
-            ]
-        },
-        options: {
-            legend: {
-                display: false
-            },
-            scales: {
-                xAxes: [{
-                    type: 'time',
-                    time: {
-                        unit: 'hour'
-                    }
-                }],
-                yAxes: [{
-                    type: 'linear',
-                    display: true,
-                    position: 'left',
-                    id: 'y-axis-1',
-                    ticks: {beginAtZero: true},
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'Power in Watts'
-                    }
-                }],
-            }
-        }
-    });
-
-
-    ctx = document.getElementById('batteryChart').getContext('2d');
-    let batteryChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: [moment().toDate(), moment().add(-1, 'd').toDate()],
-            datasets: [
-                {
-                    label: 'Min Battery Voltage',
-                    data: minBatteryVolt,
-                    fill: false,
-                    borderColor: 'rgba(0, 0, 0, 0)',
-                    borderWidth: 0,
-                    pointRadius: 1,
-                    backgroundColor: 'rgba(0, 250, 120, 0.3)',
-                    yAxisID: 'y-axis-1'
-                },
-                {
-                    label: 'Avg Battery Voltage',
-                    data: avgBatteryVolt,
-                    fill: false,
-                    borderColor: 'rgba(0, 250, 120, 1)',
-                    borderWidth: 3,
-                    pointRadius: 1,
-                    yAxisID: 'y-axis-1'
-                },
-                {
-                    label: 'Max Battery Voltage',
-                    data: maxBatteryVolt,
-                    fill: 0,
-                    borderColor: 'rgba(0, 0, 0, 0)',
-                    borderWidth: 0,
-                    pointRadius: 1,
-                    backgroundColor: 'rgba(0, 250, 120, 0.3)',
-                    yAxisID: 'y-axis-1'
-                },
-            ]
-        },
-        options: {
-            legend: {
-                display: false
-            },
-            scales: {
-                xAxes: [{
-                    type: 'time',
-                    time: {
-                        unit: 'hour'
-                    }
-                }],
-                yAxes: [{
-                    type: 'linear',
-                    display: true,
-                    position: 'left',
-                    id: 'y-axis-1',
-                    ticks: {suggestedMin: 11.5},
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'Battery Voltage'
-                    }
-                }],
-
-            }
-        }
-    });
 }
 
 function drawPowerGauges(powerData) {
@@ -307,8 +90,116 @@ function drawPowerGauges(powerData) {
     });
 }
 
+function drawPowerHistory(powerDataList) {
+    // Something is not working with this sorting, it is completely screwed up. Therefore, we rely on the data to be
+    // returned sorted by the backend (which simply does it the right way)...
+    // powerDataList = powerDataList.sort((a, b) => new Date(a.dateTime).getDate() - new Date(b.dateTime).getDate() );
+    drawPvHistory(powerDataList);
+    drawBatteryHistory(powerDataList);
+    drawLoadHistory(powerDataList);
+}
+
+function drawPvHistory(powerDataList) {
+    let values = [];
+    powerDataList.forEach(function (powerData) {
+        values.push({x: moment.utc(powerData.dateTime), y: powerData.solarPower})
+    });
+    new Chart(document.getElementById('solarPowerChart').getContext('2d'),
+        {
+            type: 'line',
+            data: {
+                labels: [moment().toDate(), moment().add(-1, 'd').toDate()],
+                datasets: [{
+                    label: 'PV Power',
+                    data: values,
+                    fill: "start",
+                    borderColor: 'rgba(100, 100, 0, 0)',
+                    borderWidth: 0,
+                    pointRadius: 1,
+                    backgroundColor: 'rgba(0, 250, 120, 0.3)'
+                }]
+            },
+            options: {
+                legend: {display: false},
+                scales: {
+                    xAxes: [{type: 'time', time: {unit: 'hour'}}],
+                    yAxes: [{type: 'linear', display: true}]
+                }
+            }
+        });
+}
+
+function drawBatteryHistory(powerDataList) {
+    let values = [];
+    powerDataList.forEach(function (powerData) {
+        values.push({x: moment.utc(powerData.dateTime), y: powerData.batteryVoltage})
+    });
+    new Chart(document.getElementById('batteryVoltageChart').getContext('2d'),
+        {
+            type: 'line',
+            data: {
+                labels: [moment().toDate(), moment().add(-1, 'd').toDate()],
+                datasets: [{
+                    label: 'Battery Voltage',
+                    data: values,
+                    fill: 'start',
+                    borderColor: 'rgba(0, 0, 0, 0)',
+                    borderWidth: 0,
+                    pointRadius: 1,
+                    backgroundColor: 'rgba(0, 250, 120, 0.3)'
+                }]
+            },
+            options: {
+                legend: {display: false},
+                scales: {
+                    xAxes: [{type: 'time', time: {unit: 'hour'}}],
+                    yAxes: [{type: 'linear', display: true}]
+                }
+            }
+        });
+}
+
+function drawLoadHistory(powerDataList) {
+    let values = [];
+    powerDataList.forEach(function (powerData) {
+        values.push({x: moment.utc(powerData.dateTime), y: powerData.loadPower})
+    });
+    new Chart(document.getElementById('loadPowerChart').getContext('2d'),
+        {
+            type: 'line',
+            data: {
+                labels: [moment().toDate(), moment().add(-1, 'd').toDate()],
+                datasets: [{
+                    label: 'Load Power',
+                    data: values,
+                    fill: 'start',
+                    borderColor: 'rgba(0, 0, 0, 0)',
+                    borderWidth: 0,
+                    pointRadius: 1,
+                    backgroundColor: 'rgba(0, 250, 120, 0.3)'
+                }]
+            },
+            options: {
+                legend: {display: false},
+                scales: {
+                    xAxes: [{
+                        type: 'time',
+                        time: {
+                            unit: 'hour',
+                            displayFormats: {hour: 'H:mm'},
+                            // parser: function (utcMoment) {
+                            //     return moment(utcMoment).utcOffset('+0100');
+                            // }
+                        }
+                    }],
+                    yAxes: [{type: 'linear', display: true}]
+                }
+            }
+        });
+}
+
 Chart.defaults.global.defaultFontColor = '#bbb';
 
-getData("/summary/past24Hours", drawSummaryCharts);
-getData("/powerData", drawPowerGauges);
+loadAndDisplayData("/powerData", drawPowerGauges);
+loadAndDisplayData("/powerData/last24Hours", drawPowerHistory);
 

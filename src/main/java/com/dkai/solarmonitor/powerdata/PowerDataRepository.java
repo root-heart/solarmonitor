@@ -7,8 +7,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface PowerDataRepository extends JpaRepository<PowerData, Long> {
-    List<PowerData> getByDateTimeBetween(LocalDateTime from, LocalDateTime to);
+    List<PowerData> findAllByDateTimeBetween(LocalDateTime from, LocalDateTime to);
 
     @Query("select p from PowerData p where p.id = (select max(id) from PowerData)")
     PowerData findLatest();
+
+    @Query(
+            value = "select * from power_data " +
+                    "where cast(extract(minute from date_time) as int) % 6 = 0 " +
+                    "and date_time > now() - interval '1 day'" +
+                    "order by date_time",
+            nativeQuery = true)
+    List<PowerData> getDataOfLast24Hours();
 }
