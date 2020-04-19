@@ -10,40 +10,24 @@ function getData(path, successCallback) {
     request.send();
 }
 
-function drawSummaryCharts(summaryData) {
-
+function drawSolarSummaryChart(summaryData) {
     let minPvPower = []
     let avgPvPower = []
     let maxPvPower = []
-    let minLoadPower = [];
-    let avgLoadPower = [];
-    let maxLoadPower = [];
-    let minBatteryVolt = [];
-    let avgBatteryVolt = [];
-    let maxBatteryVolt = [];
-
     summaryData.forEach(function (element) {
         minPvPower.push({x: element.end, y: element.minSolarPower});
         avgPvPower.push({x: element.end, y: element.avgSolarPower});
         maxPvPower.push({x: element.end, y: element.maxSolarPower});
-        minLoadPower.push({x: element.end, y: -element.minLoadPower});
-        avgLoadPower.push({x: element.end, y: -element.avgLoadPower});
-        maxLoadPower.push({x: element.end, y: -element.maxLoadPower});
-        minBatteryVolt.push({x: element.end, y: element.minBatteryVoltage});
-        avgBatteryVolt.push({x: element.end, y: element.avgBatteryVoltage});
-        maxBatteryVolt.push({x: element.end, y: element.maxBatteryVoltage});
     });
 
-    console.log(summaryData);
-
-    let ctx = document.getElementById('powerChart').getContext('2d');
+    let ctx = document.getElementById('solarPowerChart').getContext('2d');
     let powerChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: [moment().toDate(), moment().add(-1, 'd').toDate()],
             datasets: [
                 {
-                    label: 'Min PV Power',
+                    label: undefined, // 'Min PV Power',
                     data: minPvPower,
                     fill: false,
                     borderColor: 'rgba(0, 0, 0, 0)',
@@ -53,7 +37,7 @@ function drawSummaryCharts(summaryData) {
                     pointHoverRadius: 15
                 },
                 {
-                    label: 'Avg PV Power',
+                    label: undefined, // 'Avg PV Power',
                     data: avgPvPower,
                     fill: false,
                     borderColor: 'rgba(250, 120, 0, 1)',
@@ -62,7 +46,7 @@ function drawSummaryCharts(summaryData) {
                     pointHoverRadius: 15
                 },
                 {
-                    label: 'Max PV Power',
+                    label: undefined, //'Max PV Power',
                     data: maxPvPower,
                     fill: 0,
                     borderColor: 'rgba(0, 0, 0, 0)',
@@ -70,7 +54,59 @@ function drawSummaryCharts(summaryData) {
                     pointRadius: 1,
                     backgroundColor: 'rgba(250, 120, 0, 0.3)',
                     pointHoverRadius: 15
-                },
+                }
+            ]
+        },
+        options: {
+            legend: {
+                display: false
+            },
+            scales: {
+                xAxes: [{
+                    type: 'time',
+                    time: {unit: 'hour'}
+                }],
+                yAxes: [{
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    id: 'y-axis-1',
+                    ticks: {beginAtZero: true},
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Power in Watts'
+                    }
+                }],
+            }
+        }
+    });
+}
+
+function drawSummaryCharts(summaryData) {
+    drawSolarSummaryChart(summaryData);
+
+    let minLoadPower = [];
+    let avgLoadPower = [];
+    let maxLoadPower = [];
+    let minBatteryVolt = [];
+    let avgBatteryVolt = [];
+    let maxBatteryVolt = [];
+
+    summaryData.forEach(function (element) {
+        minLoadPower.push({x: element.end, y: element.minLoadPower});
+        avgLoadPower.push({x: element.end, y: element.avgLoadPower});
+        maxLoadPower.push({x: element.end, y: element.maxLoadPower});
+        minBatteryVolt.push({x: element.end, y: element.minBatteryVoltage});
+        avgBatteryVolt.push({x: element.end, y: element.avgBatteryVoltage});
+        maxBatteryVolt.push({x: element.end, y: element.maxBatteryVoltage});
+    });
+
+    let ctx = document.getElementById('loadPowerChart').getContext('2d');
+    let powerChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [moment().toDate(), moment().add(-1, 'd').toDate()],
+            datasets: [
                 {
                     label: 'Min Load Power',
                     data: minLoadPower,
@@ -100,6 +136,9 @@ function drawSummaryCharts(summaryData) {
             ]
         },
         options: {
+            legend: {
+                display: false
+            },
             scales: {
                 xAxes: [{
                     type: 'time',
@@ -161,6 +200,9 @@ function drawSummaryCharts(summaryData) {
             ]
         },
         options: {
+            legend: {
+                display: false
+            },
             scales: {
                 xAxes: [{
                     type: 'time',
@@ -267,6 +309,6 @@ function drawPowerGauges(powerData) {
 
 Chart.defaults.global.defaultFontColor = '#bbb';
 
-getData("/summary/day/2020-04-13", drawSummaryCharts);
+getData("/summary/past24Hours", drawSummaryCharts);
 getData("/powerData", drawPowerGauges);
 

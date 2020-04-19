@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +31,7 @@ public class SummaryService {
                     + " max(load_power) as max_load, "
                     + " avg(load_power) as avg_load "
                     + " from power_data "
-                    + " where date_time is not null "
+                    + " where date_time between :from and :to "
                     + " group by to_char(date_time, 'YYYYMMDDHH24') "
                     + " order by to_char(date_time, 'YYYYMMDDHH24')";
 
@@ -40,8 +40,26 @@ public class SummaryService {
     private final EntityManager entityManager;
 
     public List<SummaryData> getForDay(LocalDate day) {
-        Query query = entityManager.createNativeQuery(QUERY_SUMMARY_DATA);
-        List<?> resultList = query.getResultList();
+        List<?> resultList = entityManager
+                .createNativeQuery(QUERY_SUMMARY_DATA)
+                .setParameter("from", day)
+                .setParameter("to", day.plusDays(1))
+                .getResultList();
+        return resultList.stream()
+                .map(Object[].class::cast)
+                .map(this::mapFromResultRow)
+                .collect(Collectors.toList());
+    }
+
+    public List<SummaryData> getForPast24Hours() {
+        LocalDate today = LocalDate.now();
+        LocalTime time = LocalTime.now();
+        LocalDateTime intervalEnd = today.atTime(time.getHour(), 0);
+        List<?> resultList = entityManager
+                .createNativeQuery(QUERY_SUMMARY_DATA)
+                .setParameter("from", intervalEnd.minusDays(1))
+                .setParameter("to", intervalEnd)
+                .getResultList();
         return resultList.stream()
                 .map(Object[].class::cast)
                 .map(this::mapFromResultRow)

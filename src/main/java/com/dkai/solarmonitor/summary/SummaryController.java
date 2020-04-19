@@ -21,4 +21,9 @@ public class SummaryController {
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate day) {
         return summaryService.getForDay(day);
     }
+
+    @GetMapping("/past24Hours")
+    public List<SummaryData> getPast24Hours() {
+        return summaryService.getForPast24Hours();
+    }
 }
