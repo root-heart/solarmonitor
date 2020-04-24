@@ -47,6 +47,10 @@ function drawPowerGauges(powerData) {
             }, {
                 color: "#0d0",
                 lo: 12.0,
+                hi: 12.8
+            }, {
+                color: "#0dd",
+                lo: 12.8,
                 hi: 14.5
             }]
         },

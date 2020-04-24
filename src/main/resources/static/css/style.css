@@ -1,5 +1,7 @@
 .grid-container {
     display: grid;
-    grid-template-columns: 500px 500px 500px;
-    grid-template-rows: 300px 300px 300px;
+    grid-template-columns: 28% 28% 28%;
+    grid-template-rows: 250px 250px 250px;
+    grid-gap: 5%;
+    justify-content:center;
 }
