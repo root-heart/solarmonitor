@@ -10,80 +10,49 @@ function loadAndDisplayData(path, displayCallback) {
     request.send();
 }
 
+function gaugeOptions(min, max, title, value) {
+    return {
+        donut: true,
+        donutWidth: 40,
+        startAngle: 300,
+        showLabel: false,
+        total: 360 / 150 * (max - min),
+        plugins: [
+            Chartist.plugins.fillDonut({
+                items: [{
+                    content: '<span class="title">' + title + '</span><span class="value">' + value + '</span>',
+                    position: 'left top'
+                }]
+            })
+        ]
+    }
+}
+
+function drawPvGauge(powerData) {
+    let data = {
+        series: [powerData.solarPower, 600 - powerData.solarPower]
+    };
+    new Chartist.Pie("#solar_gauge", data, gaugeOptions(0, 600, "PV Power", powerData.solarPower + "W"));
+}
+
+function drawBatteryGauge(powerData) {
+    let data = {
+        series: [powerData.batteryVoltage - 10, 15 - powerData.batteryVoltage]
+    };
+    new Chartist.Pie("#battery_gauge", data, gaugeOptions(10, 15, "Battery Voltage", powerData.batteryVoltage + "V"));
+}
+
+function drawLoadGauge(powerData) {
+    let data = {
+        series: [powerData.loadPower, 300 - powerData.loadPower]
+    };
+    new Chartist.Pie("#load_gauge", data, gaugeOptions(0, 300, "Load Power", powerData.loadPower + "W"));
+}
+
 function drawPowerGauges(powerData) {
-    let solarGauge = new JustGage({
-        id: "solar_gauge",
-        value: powerData.solarPower,
-        gaugeColor: "#555",
-        valueFontColor: "#bbb",
-        levelColors: ["#0d0"],
-        decimals: 2,
-        symbol: "W",
-        hideMinMax: true,
-        min: 0,
-        max: 550,
-        label: "Solar Power"
-    });
-
-    let batteryGauge = new JustGage({
-        id: "battery_gauge",
-        value: powerData.batteryVoltage,
-        gaugeColor: "#555",
-        valueFontColor: "#bbb",
-        decimals: 2,
-        symbol: "V",
-        hideMinMax: true,
-        min: 9.5,
-        max: 14.5,
-        customSectors: {
-            ranges: [{
-                color: "#d00",
-                lo: 9.5,
-                hi: 11.5
-            }, {
-                color: "#dd0",
-                lo: 11.5,
-                hi: 12.0
-            }, {
-                color: "#0d0",
-                lo: 12.0,
-                hi: 12.8
-            }, {
-                color: "#0dd",
-                lo: 12.8,
-                hi: 14.5
-            }]
-        },
-        label: "Battery Voltage"
-    });
-
-    let loadGauge = new JustGage({
-        id: "load_gauge",
-        value: powerData.loadPower,
-        gaugeColor: "#555",
-        valueFontColor: "#bbb",
-        decimals: 2,
-        symbol: "W",
-        hideMinMax: true,
-        min: 0,
-        max: 300,
-        customSectors: {
-            ranges: [{
-                color: "#0d0",
-                lo: 0,
-                hi: 150
-            }, {
-                color: "#dd0",
-                lo: 150,
-                hi: 220
-            }, {
-                color: "#d00",
-                lo: 220,
-                hi: 300
-            }]
-        },
-        label: "Load Power"
-    });
+    drawPvGauge(powerData);
+    drawBatteryGauge(powerData);
+    drawLoadGauge(powerData);
 }
 
 function drawPowerHistory(powerDataList) {
@@ -95,34 +64,41 @@ function drawPowerHistory(powerDataList) {
     drawLoadHistory(powerDataList);
 }
 
+function historyChartOptions() {
+    let ticks = [];
+    let tick = moment().startOf("hour");
+    for (let i = 0; i < 11; i++) {
+        ticks.push(tick);
+        tick = moment(tick).add(-2, "hour");
+    }
+
+    let options = {};
+    options.axisX = {
+        type: Chartist.FixedScaleAxis,
+        ticks: ticks,
+        labelInterpolationFnc: function (value) {
+            return moment(value).format('HH:mm');
+        }
+    };
+    options.showLine = true;
+    options.showPoint = false;
+    options.showArea = true;
+    options.chartPadding = {
+        top: 20,
+        right: 18,
+        bottom: -5,
+        left: 3
+    };
+    return options;
+}
+
 function drawPvHistory(powerDataList) {
     let values = [];
     powerDataList.forEach(function (powerData) {
         values.push({x: moment.utc(powerData.dateTime), y: powerData.solarPower})
     });
-    new Chart(document.getElementById('solarPowerChart').getContext('2d'),
-        {
-            type: 'line',
-            data: {
-                labels: [moment().toDate(), moment().add(-1, 'd').toDate()],
-                datasets: [{
-                    label: 'PV Power',
-                    data: values,
-                    fill: "start",
-                    borderColor: 'rgba(100, 100, 0, 0)',
-                    borderWidth: 0,
-                    pointRadius: 1,
-                    backgroundColor: 'rgba(0, 250, 120, 0.3)'
-                }]
-            },
-            options: {
-                legend: {display: false},
-                scales: {
-                    xAxes: [{type: 'time', time: {unit: 'hour'}}],
-                    yAxes: [{type: 'linear', display: true}]
-                }
-            }
-        });
+    let data = {series: [{name: 'solar power', data: values}]};
+    new Chartist.Line('#solarPowerChart', data, historyChartOptions());
 }
 
 function drawBatteryHistory(powerDataList) {
@@ -130,29 +106,8 @@ function drawBatteryHistory(powerDataList) {
     powerDataList.forEach(function (powerData) {
         values.push({x: moment.utc(powerData.dateTime), y: powerData.batteryVoltage})
     });
-    new Chart(document.getElementById('batteryVoltageChart').getContext('2d'),
-        {
-            type: 'line',
-            data: {
-                labels: [moment().toDate(), moment().add(-1, 'd').toDate()],
-                datasets: [{
-                    label: 'Battery Voltage',
-                    data: values,
-                    fill: 'start',
-                    borderColor: 'rgba(0, 0, 0, 0)',
-                    borderWidth: 0,
-                    pointRadius: 1,
-                    backgroundColor: 'rgba(0, 250, 120, 0.3)'
-                }]
-            },
-            options: {
-                legend: {display: false},
-                scales: {
-                    xAxes: [{type: 'time', time: {unit: 'hour'}}],
-                    yAxes: [{type: 'linear', display: true}]
-                }
-            }
-        });
+    let data = {series: [{name: 'Battery Voltage', data: values}]};
+    new Chartist.Line('#batteryVoltageChart', data, historyChartOptions());
 }
 
 function drawLoadHistory(powerDataList) {
@@ -160,41 +115,9 @@ function drawLoadHistory(powerDataList) {
     powerDataList.forEach(function (powerData) {
         values.push({x: moment.utc(powerData.dateTime), y: powerData.loadPower})
     });
-    new Chart(document.getElementById('loadPowerChart').getContext('2d'),
-        {
-            type: 'line',
-            data: {
-                labels: [moment().toDate(), moment().add(-1, 'd').toDate()],
-                datasets: [{
-                    label: 'Load Power',
-                    data: values,
-                    fill: 'start',
-                    borderColor: 'rgba(0, 0, 0, 0)',
-                    borderWidth: 0,
-                    pointRadius: 1,
-                    backgroundColor: 'rgba(0, 250, 120, 0.3)'
-                }]
-            },
-            options: {
-                legend: {display: false},
-                scales: {
-                    xAxes: [{
-                        type: 'time',
-                        time: {
-                            unit: 'hour',
-                            displayFormats: {hour: 'H:mm'},
-                            // parser: function (utcMoment) {
-                            //     return moment(utcMoment).utcOffset('+0100');
-                            // }
-                        }
-                    }],
-                    yAxes: [{type: 'linear', display: true}]
-                }
-            }
-        });
+    let data = {series: [{name: 'Battery Voltage', data: values}]};
+    new Chartist.Line('#loadPowerChart', data, historyChartOptions());
 }
-
-Chart.defaults.global.defaultFontColor = '#bbb';
 
 loadAndDisplayData("/powerData", drawPowerGauges);
 loadAndDisplayData("/powerData/last24Hours", drawPowerHistory);

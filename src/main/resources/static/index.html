@@ -1,28 +1,24 @@
 <html>
 <head>
+    <!--    <link rel="stylesheet" href="css/chartist.css">-->
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/chartist.js"></script>
+    <script src="js/chartist-plugin-fill-donut.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-    <script src="js/raphael.min.js"></script>
-    <script src="js/justgage.js"></script>
+    <!--    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>-->
+    <!--    <script src="js/raphael.min.js"></script>-->
+    <!--    <script src="js/justgage.js"></script>-->
 </head>
-<body style="background-color: #303030">
+<body>
 
 <div class="grid-container">
-    <div id="solar_gauge" class="grid-item"></div>
-    <div id="battery_gauge" class="grid-item"></div>
-    <div id="load_gauge" class="grid-item"></div>
-    <div class="grid-item">
-        <canvas id="solarPowerChart" width="5" height="3"></canvas>
-    </div>
-    <div class="grid-item">
-        <canvas id="batteryVoltageChart" width="5" height="3"></canvas>
-    </div>
-    <div class="grid-item">
-        <canvas id="loadPowerChart" width="5" height="3"></canvas>
-    </div>
+    <div id="solar_gauge" class="grid-item gauge"></div>
+    <div id="battery_gauge" class="grid-item gauge"></div>
+    <div id="load_gauge" class="grid-item gauge"></div>
+    <div id="solarPowerChart" class="grid-item history"></div>
+    <div id="batteryVoltageChart" class="grid-item history"></div>
+    <div id="loadPowerChart" class="grid-item history"></div>
 </div>
-
 
 <script src="js/script.js"></script>
 </body>

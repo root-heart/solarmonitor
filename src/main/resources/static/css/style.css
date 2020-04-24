@@ -1,7 +1,82 @@
+html {
+    background-color: #222;
+    color: #bbb;
+    font: 12px sans-serif;
+}
+
 .grid-container {
     display: grid;
-    grid-template-columns: 28% 28% 28%;
-    grid-template-rows: 250px 250px 250px;
-    grid-gap: 5%;
-    justify-content:center;
+    grid-template-columns: 28vw 28vw 28vw;
+    grid-template-rows: 12vw 12vw 12vw;
+    grid-gap: 2vw;
+    justify-content: center;
+}
+
+.ct-label.ct-horizontal.ct-end {
+    transform: translate(-50%, 0);
+    display: block;
+    text-align: center;
+}
+
+.ct-label.ct-vertical.ct-start {
+    display: inline-flex;
+    transform: translate(0, 50%);
+    align-items: center;
+    alignment: right;
+}
+
+.ct-slice-donut {
+    fill: none;
+}
+
+.ct-line {
+    fill: none;
+    stroke-width: 2px;
+}
+
+.ct-area {
+    stroke: none;
+    fill-opacity: 0.3;
+}
+
+.ct-series-a {
+    stroke: #1BB744;
+}
+
+.ct-series-a .ct-area {
+    fill: #1BB744;
+}
+
+.gauge path {
+    transform: scale(2);
+    transform-origin: 50% 0;
+}
+
+.gauge .ct-series-b, .ct-grid {
+    stroke: #5B5B59;
+}
+
+.gauge .ct-fill-donut-label {
+    text-align: center;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.gauge .ct-fill-donut-label .title {
+    font: 15px sans-serif;
+    position: absolute;
+    bottom: 8%;
+    right: 69%;
+}
+
+.gauge .ct-fill-donut-label .value {
+    font: bold 42px sans-serif;
+    position: absolute;
+    display: inline-block;
+    bottom: 0;
+    left: 33%;
+    right: 33%;
 }
