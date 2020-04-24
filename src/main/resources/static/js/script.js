@@ -21,7 +21,7 @@ function drawPowerGauges(powerData) {
         symbol: "W",
         hideMinMax: true,
         min: 0,
-        max: 700,
+        max: 550,
         label: "Solar Power"
     });
 
@@ -33,29 +33,21 @@ function drawPowerGauges(powerData) {
         decimals: 2,
         symbol: "V",
         hideMinMax: true,
-        min: 10,
-        max: 16,
+        min: 9.5,
+        max: 14.5,
         customSectors: {
             ranges: [{
                 color: "#d00",
-                lo: 10,
-                hi: 11
-            }, {
-                color: "#dd0",
-                lo: 11,
+                lo: 9.5,
                 hi: 11.5
             }, {
-                color: "#0d0",
-                lo: 11.5,
-                hi: 14.5
-            }, {
                 color: "#dd0",
-                lo: 14.5,
-                hi: 15
+                lo: 11.5,
+                hi: 12.0
             }, {
-                color: "#d00",
-                lo: 15,
-                hi: 16
+                color: "#0d0",
+                lo: 12.0,
+                hi: 14.5
             }]
         },
         label: "Battery Voltage"
@@ -70,20 +62,20 @@ function drawPowerGauges(powerData) {
         symbol: "W",
         hideMinMax: true,
         min: 0,
-        max: 400,
+        max: 300,
         customSectors: {
             ranges: [{
                 color: "#0d0",
                 lo: 0,
-                hi: 200
+                hi: 150
             }, {
                 color: "#dd0",
-                lo: 200,
-                hi: 300
+                lo: 150,
+                hi: 220
             }, {
                 color: "#d00",
-                lo: 300,
-                hi: 400
+                lo: 220,
+                hi: 300
             }]
         },
         label: "Load Power"
