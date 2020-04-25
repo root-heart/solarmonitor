@@ -1,34 +1,57 @@
 package com.dkai.solarmonitor.summary;
 
-import lombok.Builder;
+import com.dkai.solarmonitor.powerdata.PowerData;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.function.Function;
 
 @Getter
 @Setter
-@Builder
+@Entity
 public class SummaryData {
-    private LocalDateTime start;
-    private LocalDateTime end;
+    @Id
+    @GeneratedValue
+    private long id;
+    private LocalDate day;
+    @Convert(converter = PowerDataListToJsonStringConverter.class)
+    private List<PowerData> powerData;
 
-    private BigDecimal minSolarPower;
-    private BigDecimal maxSolarPower;
-    private BigDecimal avgSolarPower;
-    private BigDecimal minBatteryVoltage;
-    private BigDecimal maxBatteryVoltage;
-    private BigDecimal avgBatteryVoltage;
-    private BigDecimal minBatteryPower;
-    private BigDecimal maxBatteryPower;
-    private BigDecimal avgBatteryPower;
-    private BigDecimal minLoadPower;
-    private BigDecimal maxLoadPower;
-    private BigDecimal avgLoadPower;
+    public BigDecimal getGeneratedEnergy() {
+        return getMax(PowerData::getGeneratedEnergyToday);
+    }
 
-    private BigDecimal maximumBatteryVoltageToday;
-    private BigDecimal minimumBatteryVoltageToday;
-    private BigDecimal consumedEnergyToday;
-    private BigDecimal generatedEnergyToday;
+    public BigDecimal getConsumedEnergy() {
+        return getMax(PowerData::getConsumedEnergyToday);
+    }
+
+    public BigDecimal getMinBatteryVoltage() {
+        return getMin(PowerData::getBatteryVoltage);
+    }
+
+    public BigDecimal getMaxBatteryVoltage() {
+        return getMax(PowerData::getBatteryVoltage);
+    }
+
+    private BigDecimal getMax(Function<PowerData, BigDecimal> valueGetMethod) {
+        return powerData.stream()
+                .map(valueGetMethod)
+                .max(BigDecimal::compareTo)
+                .orElse(BigDecimal.ZERO);
+    }
+
+    private BigDecimal getMin(Function<PowerData, BigDecimal> valueGetMethod) {
+        return powerData.stream()
+                .map(valueGetMethod)
+                .min(BigDecimal::compareTo)
+                .orElse(BigDecimal.ZERO);
+    }
+
 }

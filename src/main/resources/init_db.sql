@@ -1,4 +1,5 @@
---drop table power_data;
+create sequence hibernate_sequence;
+
 create table power_data
 (
     id                            bigint not null primary key,
@@ -24,4 +25,11 @@ create table power_data
     generated_energy_this_month   numeric(10, 2),
     generated_energy_this_year    numeric(10, 2),
     total_generated_energy        numeric(10, 2)
+);
+
+create table summary_data
+(
+    id         bigint not null primary key,
+    day        date unique,
+    power_data text
 );
