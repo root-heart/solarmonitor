@@ -10,7 +10,15 @@ function loadAndDisplayData(path, displayCallback) {
     request.send();
 }
 
-function gaugeOptions(min, max, title, value) {
+function gaugeOptions(min, max, title, currentValue, otherValues) {
+    let content =
+        '<div style="text-align: center; bottom: 0; left: 0; right: 0; position: absolute">' +
+        '<span class="title">' + title + '</span><br/>' +
+        '<span class="value">' + currentValue + '</span>' +
+        '</div>' +
+        '<div style="text-align: left; position: absolute; left: 10%; bottom: 2%">';
+    otherValues.forEach(otherValue => content += '<span>' + otherValue + '</span><br/>');
+    content += '</div>';
     return {
         donut: true,
         donutWidth: 40,
@@ -20,8 +28,8 @@ function gaugeOptions(min, max, title, value) {
         plugins: [
             Chartist.plugins.fillDonut({
                 items: [{
-                    content: '<span class="title">' + title + '</span><span class="value">' + value + '</span>',
-                    position: 'left top'
+                    content: content,
+                    position: 'custom'
                 }]
             })
         ]
@@ -32,21 +40,37 @@ function drawPvGauge(powerData) {
     let data = {
         series: [powerData.solarPower, 600 - powerData.solarPower]
     };
-    new Chartist.Pie("#solar_gauge", data, gaugeOptions(0, 600, "PV Power", powerData.solarPower + "W"));
+    let otherValues = [
+        "Today: " + powerData.generatedEnergyToday + "kWh",
+        "This month: "  + powerData.generatedEnergyThisMonth + "kWh"
+    ];
+    new Chartist.Pie("#solar_gauge",
+        data,
+        gaugeOptions(0, 600, "PV Power", powerData.solarPower + "W", otherValues));
 }
 
 function drawBatteryGauge(powerData) {
     let data = {
         series: [powerData.batteryVoltage - 10, 15 - powerData.batteryVoltage]
     };
-    new Chartist.Pie("#battery_gauge", data, gaugeOptions(10, 15, "Battery Voltage", powerData.batteryVoltage + "V"));
+    let otherValues = [
+        "Min: " + powerData.minimumBatteryVoltageToday + "V",
+        "Max: " + powerData.maximumBatteryVoltageToday + "V"
+    ];
+    new Chartist.Pie("#battery_gauge",
+        data,
+        gaugeOptions(10, 15, "Battery Voltage", powerData.batteryVoltage + "V", otherValues));
 }
 
 function drawLoadGauge(powerData) {
     let data = {
         series: [powerData.loadPower, 300 - powerData.loadPower]
     };
-    new Chartist.Pie("#load_gauge", data, gaugeOptions(0, 300, "Load Power", powerData.loadPower + "W"));
+    let otherValues = [
+        "Today: " + powerData.consumedEnergyToday + "kWh",
+        "This month: "  + powerData.consumedEnergyThisMonth + "kWh"
+    ];
+    new Chartist.Pie("#load_gauge", data, gaugeOptions(0, 300, "Load Power", powerData.loadPower + "W", otherValues));
 }
 
 function drawPowerGauges(powerData) {
