@@ -20,7 +20,8 @@ class PowerDataSummarySpec extends Specification {
         def client = new RESTClient("http://localhost:$port", ContentType.JSON)
 
         when: 'different data is added for different days'
-        client.post(path: '/power', body: powerData)
+        client.post(path: '/powerData', body: this.powerData)
+        client.post(path: '/summary/create')
 
         and: 'the summary for April 11 2020 is fetched'
         def result = client.get(path: '/summary/day/2020-04-11') as HttpResponseDecorator
@@ -29,18 +30,29 @@ class PowerDataSummarySpec extends Specification {
         result != null
         result.status == 200
         result.responseData != null
-        result.responseData.size() == 1
-        result.responseData[0].id == 1
-        result.responseData[0].solarVoltage == new BigDecimal("48.43")
-        result.responseData[0].solarCurrent == new BigDecimal("1.49")
-        result.responseData[0].solarPower == new BigDecimal("72.27")
-        result.responseData[0].batteryVoltage == new BigDecimal("13.07")
-        result.responseData[0].batteryCurrent == new BigDecimal("5.53")
-        result.responseData[0].batteryPower == new BigDecimal("72.27")
+        result.responseData.id != null
+        result.responseData.day == "2020-04-11"
+        result.responseData.generatedEnergy == new BigDecimal("0.14")
+        result.responseData.consumedEnergy == new BigDecimal("0.26")
+        result.responseData.minBatteryVoltage == new BigDecimal("13.07")
+        result.responseData.maxBatteryVoltage == new BigDecimal("13.07")
+
+
+        def powerData = result.responseData.powerData
+        powerData != null
+        powerData instanceof List
+        powerData.size() == 1
+        powerData[0].id == 1
+        powerData[0].solarVoltage == new BigDecimal("48.43")
+        powerData[0].solarCurrent == new BigDecimal("1.49")
+        powerData[0].solarPower == new BigDecimal("72.27")
+        powerData[0].batteryVoltage == new BigDecimal("13.07")
+        powerData[0].batteryCurrent == new BigDecimal("5.53")
+        powerData[0].batteryPower == new BigDecimal("72.27")
     }
 
     static String powerData =
-        """{
+            """{
                 "secondsSince1970": 1586607377,
                 "registers3100To3107": "01041012EB00951C3B0000051B02291C3B0000F516",
                 "registers310cTo3111": "01040C04FD002101A5000009790AF82927",

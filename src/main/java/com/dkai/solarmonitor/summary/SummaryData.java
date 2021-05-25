@@ -4,6 +4,7 @@ import com.dkai.solarmonitor.powerdata.PowerData;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,6 +23,7 @@ public class SummaryData {
     private long id;
     private LocalDate day;
     @Convert(converter = PowerDataListToJsonStringConverter.class)
+    @Column(length = 1000)
     private List<PowerData> powerData;
 
     public BigDecimal getGeneratedEnergy() {
