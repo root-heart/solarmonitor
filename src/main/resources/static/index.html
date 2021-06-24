@@ -1,19 +1,74 @@
 <html>
 <head>
     <link rel="stylesheet" href="css/style.css">
-    <script src="js/chartist.js"></script>
-    <script src="js/chartist-plugin-fill-donut.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@1.22.2/build/global/luxon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@0.2.1"></script>
 </head>
 <body>
 
+
 <div class="grid-container">
-    <div id="solar_gauge" class="grid-item gauge"></div>
-    <div id="battery_gauge" class="grid-item gauge"></div>
-    <div id="load_gauge" class="grid-item gauge"></div>
-    <div id="solarPowerChart" class="grid-item history"></div>
-    <div id="batteryVoltageChart" class="grid-item history"></div>
-    <div id="loadPowerChart" class="grid-item history"></div>
+    <div>
+        <canvas id="powerChart"></canvas>
+    </div>
+    <div>
+        <h1>Current Power in Watts</h1>
+        <table>
+            <tr>
+                <td>PV</td>
+                <td id="currentPvPower"></td>
+            </tr>
+            <tr>
+                <td>Load</td>
+                <td id="currentLoadPower"></td>
+            </tr>
+            <tr>
+                <td>Overall</td>
+                <td id="currentOverallPower"></td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <canvas id="energyChart"></canvas>
+    </div>
+    <div id="energySummary">
+        <h1>Energy in kWh</h1>
+        <table>
+            <tr>
+                <td>Generated Energy Today</td>
+                <td id="generatedEnergy"></td>
+            </tr>
+            <tr>
+                <td>Consumed Energy Today</td>
+                <td id="consumedEnergy"></td>
+            </tr>
+            <tr>
+                <td>Overall Energy Today</td>
+                <td id="overallEnergy"></td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <canvas id="batteryVoltageChart"></canvas>
+    </div>
+    <div id="batterySummary">
+        <h1>Current Battery Status</h1>
+        <table>
+            <tr>
+                <td>Current Voltage</td>
+                <td id="currentBatteryVoltage"></td>
+            </tr>
+            <tr>
+                <td>Maximum Voltage Today</td>
+                <td id="maximumBatteryVoltage"></td>
+            </tr>
+            <tr>
+                <td>Minimum Voltage Today</td>
+                <td id="minimumBatteryVoltage"></td>
+            </tr>
+        </table>
+    </div>
 </div>
 
 <script src="js/script.js"></script>

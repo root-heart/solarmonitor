@@ -2,6 +2,7 @@ package com.dkai.solarmonitor.powerdata;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,11 +16,10 @@ public interface PowerDataRepository extends JpaRepository<PowerData, Long> {
 
     @Query(
             value = "select * from power_data " +
-                    "where cast(extract(minute from date_time) as int) % 6 = 0 " +
-                    "and date_time > now() - interval '1 day'" +
+                    "where date_time > :from " +
                     "order by date_time",
             nativeQuery = true)
-    List<PowerData> getDataOfLast24Hours();
+    List<PowerData> getDataOfLast24Hours(@Param("from") LocalDateTime from);
 
     List<PowerData> findAllByDateTimeBefore(LocalDateTime when);
 }

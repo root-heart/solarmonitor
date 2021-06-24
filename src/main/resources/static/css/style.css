@@ -6,9 +6,9 @@ html {
 
 .grid-container {
     display: grid;
-    grid-template-columns: 28vw 28vw 28vw;
-    grid-template-rows: 12vw 12vw 12vw;
-    grid-gap: 2vw;
+    grid-template-columns: 68vw 28vw;
+    grid-template-rows: 13vw 13vw 13vw;
+    grid-gap: 1vw;
     justify-content: center;
 }
 
@@ -45,6 +45,30 @@ html {
 
 .ct-series-a .ct-area {
     fill: #1BB744;
+}
+
+.ct-series-b {
+    stroke: red;
+}
+
+.ct-series-b .ct-area {
+    fill: none;
+}
+
+.ct-series-c {
+    stroke: blue;
+}
+
+.ct-series-c .ct-area {
+    fill: none;
+}
+
+.ct-series-d {
+    stroke: yellow;
+}
+
+.ct-series-d .ct-area {
+    fill: none;
 }
 
 .gauge path {
