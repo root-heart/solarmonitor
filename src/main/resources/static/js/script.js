@@ -114,6 +114,7 @@ function drawBatteryHistory(powerDataList) {
     };
 
     const options = {
+        animation: false,
         maintainAspectRatio: false,
         plugins: {legend: {display: false}},
         scales: {
@@ -127,14 +128,14 @@ function drawBatteryHistory(powerDataList) {
                     }
                 },
                 grid: {
-                    color: '#5B5B59',
-                    borderColor: '#5B5B59',
+                    color: 'hsla(0, 0%, 40%, 0.3)',
+                    borderColor: 'hsl(0, 0%, 40%)',
                 }
             },
             y: {
                 grid: {
-                    color: '#5B5B59',
-                    borderColor: '#5B5B59',
+                    color: 'hsla(0, 0%, 40%, 0.3)',
+                    borderColor: 'hsl(0, 0%, 40%)',
                 },
                 title: {
                     display: true,
