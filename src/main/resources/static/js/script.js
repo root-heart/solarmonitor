@@ -149,7 +149,7 @@ function drawBatteryHistory(powerDataList) {
     };
 
 
-    options.scales.y.title.text = 'Solar Power (+) / Load Power (-) in Watts';
+    options.scales.y.title.text = 'PV (+) / Load (-) Power in Watts';
     let powerChart = new Chart(
         document.getElementById('powerChart'),
         {
@@ -159,7 +159,7 @@ function drawBatteryHistory(powerDataList) {
         }
     );
 
-    options.scales.y.title.text = 'Generated Energy (+) / Consumed Energy (-) in kWh';
+    options.scales.y.title.text = 'Collected (+) / Consumed (-) Energy in kWh';
     let energyChart = new Chart(
         document.getElementById('energyChart'),
         {
@@ -181,17 +181,18 @@ function drawBatteryHistory(powerDataList) {
 }
 
 function showPowerDataSummary(powerData) {
-    document.getElementById("currentPvPower").textContent = powerData.solarPower;
-    document.getElementById("currentLoadPower").textContent = powerData.loadPower;
-    document.getElementById("currentOverallPower").textContent = powerData.solarPower - powerData.loadPower;
+    let numberFormat = new Intl.NumberFormat('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    document.getElementById("currentPvPower").textContent = numberFormat.format(powerData.solarPower);
+    document.getElementById("currentLoadPower").textContent = numberFormat.format(powerData.loadPower);
+    document.getElementById("currentOverallPower").textContent = numberFormat.format(powerData.solarPower - powerData.loadPower);
 
-    document.getElementById("generatedEnergy").textContent = powerData.generatedEnergyToday;
-    document.getElementById("consumedEnergy").textContent = powerData.consumedEnergyToday;
-    document.getElementById("overallEnergy").textContent = powerData.generatedEnergyToday - powerData.consumedEnergyToday;
+    document.getElementById("generatedEnergy").textContent = numberFormat.format(powerData.generatedEnergyToday);
+    document.getElementById("consumedEnergy").textContent = numberFormat.format(powerData.consumedEnergyToday);
+    document.getElementById("overallEnergy").textContent = numberFormat.format(powerData.generatedEnergyToday - powerData.consumedEnergyToday);
 
-    document.getElementById("currentBatteryVoltage").textContent = powerData.batteryVoltage;
-    document.getElementById("maximumBatteryVoltage").textContent = powerData.maximumBatteryVoltageToday;
-    document.getElementById("minimumBatteryVoltage").textContent = powerData.minimumBatteryVoltageToday;
+    document.getElementById("currentBatteryVoltage").textContent = numberFormat.format(powerData.batteryVoltage);
+    document.getElementById("maximumBatteryVoltage").textContent = numberFormat.format(powerData.maximumBatteryVoltageToday);
+    document.getElementById("minimumBatteryVoltage").textContent = numberFormat.format(powerData.minimumBatteryVoltageToday);
 }
 
 loadAndDisplayData("/powerData/last24Hours", drawPowerHistory);
