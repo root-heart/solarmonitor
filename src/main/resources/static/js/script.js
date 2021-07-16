@@ -11,13 +11,6 @@ function loadAndDisplayData(path, displayCallback) {
 }
 
 function drawPowerHistory(powerDataList) {
-    // Something is not working with this sorting, it is completely screwed up. Therefore, we rely on the data to be
-    // returned sorted by the backend (which simply does it the right way)...
-    // powerDataList = powerDataList.sort((a, b) => new Date(a.dateTime).getDate() - new Date(b.dateTime).getDate() );
-    drawBatteryHistory(powerDataList);
-}
-
-function drawBatteryHistory(powerDataList) {
     Chart.defaults.elements.point = "triangle";
 
     let batteryVoltage = [];
@@ -42,6 +35,10 @@ function drawBatteryHistory(powerDataList) {
         overallEnergy.push(powerData.generatedEnergyToday - powerData.consumedEnergyToday);
     });
 
+    drawHistoryDiagrams(labels, solarPower, loadPower, overallPower, generatedEnergy, usedEnergy, overallEnergy, batteryVoltage);
+}
+
+function drawHistoryDiagrams(labels, solarPower, loadPower, overallPower, generatedEnergy, usedEnergy, overallEnergy, batteryVoltage) {
     const powerData = {
         labels: labels,
         datasets: [
@@ -180,6 +177,155 @@ function drawBatteryHistory(powerDataList) {
     );
 }
 
+function measurementToXYTuple(measurement) {
+    return {x: measurement.dateTime, y: measurement.value};
+
+}
+
+
+function drawPowerHistoryTheNewWay(data) {
+    Chart.defaults.elements.point = "triangle";
+
+    let generatedEnergy = data.collectedEnergyToday.map(measurementToXYTuple);
+    let usedEnergy = data.consumedEnergyToday.map(measurementToXYTuple);
+    let solarPower = data.pvpower.map(measurementToXYTuple);
+    let loadPower = data.loadpower.map(measurementToXYTuple);
+    let batteryVoltage  = data.batteryVoltage.map(measurementToXYTuple);
+
+    const powerData = {
+        datasets: [
+            // {
+            //     label: 'Overall Power',
+            //     borderColor: 'rgb(255, 199, 132)',
+            //     backgroundColor: 'rgba(255, 199, 132, 0.2)',
+            //     borderWidth: 2,
+            //     fill: true,
+            //     data: overallPower
+            // },
+            {
+                label: 'Solar Power',
+                borderColor: 'hsl(0, 0%, 35%)',
+                backgroundColor: 'hsl(0, 0%, 35%)',
+                borderWidth: 1,
+                data: solarPower
+            },
+            {
+
+                label: 'Load Power',
+                borderColor: 'hsl(0, 0%, 35%)',
+                backgroundColor: 'hsl(0, 0%, 35%)',
+                borderWidth: 1,
+                data: loadPower
+            }
+        ]
+    };
+
+    const energyData = {
+        datasets: [
+            // {
+            //     label: 'Overall Energy',
+            //     borderColor: 'hsl(205, 20%, 55%)',
+            //     backgroundColor: 'hsla(205, 20%, 55%, 0.4)',
+            //     borderWidth: 2,
+            //     data: overallEnergy,
+            //     fill: true
+            // },
+            {
+                label: 'Generated Energy',
+                borderColor: 'hsl(0, 0%, 35%)',
+                backgroundColor: 'hsl(0, 0%, 35%)',
+                borderWidth: 1,
+                data: generatedEnergy
+            },
+            {
+                label: 'Consumed Energy',
+                borderColor: 'hsl(0, 0%, 35%)',
+                backgroundColor: 'hsl(0, 0%, 35%)',
+                borderWidth: 1,
+                data: usedEnergy
+            }
+        ]
+    };
+
+    const batteryVoltageData = {
+        datasets: [
+            {
+                label: 'Battery Voltage',
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderWidth: 2,
+                data: batteryVoltage,
+                fill: true
+            }
+        ]
+    };
+
+    const options = {
+        animation: false,
+        maintainAspectRatio: false,
+        plugins: {legend: {display: false}},
+        scales: {
+            x: {
+                display: true,
+                type: 'time',
+                time: {
+                    unit: 'hour',
+                    displayFormats: {
+                        hour: 'HH:mm'
+                    }
+                },
+                grid: {
+                    color: 'hsla(0, 0%, 40%, 0.3)',
+                    borderColor: 'hsl(0, 0%, 40%)',
+                }
+            },
+            y: {
+                grid: {
+                    color: 'hsla(0, 0%, 40%, 0.3)',
+                    borderColor: 'hsl(0, 0%, 40%)',
+                },
+                title: {
+                    display: true,
+                    text: 'insert text here'
+                },
+                afterFit: function (axes) {
+                    axes.width = 69;
+                },
+            }
+        }
+    };
+
+    options.scales.y.title.text = 'PV (+) / Load (-) Power in Watts';
+    let powerChart = new Chart(
+        document.getElementById('powerChart'),
+        {
+            type: 'line',
+            data: powerData,
+            options: options
+        }
+    );
+
+    options.scales.y.title.text = 'Collected (+) / Consumed (-) Energy in kWh';
+    let energyChart = new Chart(
+        document.getElementById('energyChart'),
+        {
+            type: 'line',
+            data: energyData,
+            options: options
+        }
+    );
+
+    options.scales.y.title.text = 'Battery Voltage';
+    let batteryVoltageChart = new Chart(
+        document.getElementById('batteryVoltageChart'),
+        {
+            type: 'line',
+            data: batteryVoltageData,
+            options: options
+        }
+    );
+}
+
 function showPowerDataSummary(powerData) {
     let numberFormat = new Intl.NumberFormat('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
     document.getElementById("currentPvPower").textContent = numberFormat.format(powerData.solarPower);
@@ -195,6 +341,7 @@ function showPowerDataSummary(powerData) {
     document.getElementById("minimumBatteryVoltage").textContent = numberFormat.format(powerData.minimumBatteryVoltageToday);
 }
 
-loadAndDisplayData("/powerData/last24Hours", drawPowerHistory);
+// loadAndDisplayData("/powerData/last24Hours", drawPowerHistory);
 loadAndDisplayData("/powerData", showPowerDataSummary);
 
+loadAndDisplayData("/powerData/measurements?names=pvpower,loadpower,collectedEnergyToday,consumedEnergyToday,batteryVoltage", drawPowerHistoryTheNewWay)
