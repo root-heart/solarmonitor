@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +18,6 @@ import java.util.Map;
 @RequestMapping("/powerData")
 @RequiredArgsConstructor
 public class PowerDataController {
-
 
 
     private final PowerDataService powerDataService;
@@ -48,7 +45,7 @@ public class PowerDataController {
     }
 
     @GetMapping("/measurements")
-    public Map<String, Map<LocalDateTime, BigDecimal>> getMeasurements(@RequestParam List<String> names) {
+    public Map<String, List<Measurement>> getMeasurements(@RequestParam List<String> names) {
         return powerDataService.getMeasurementsByNames(names);
     }
 }

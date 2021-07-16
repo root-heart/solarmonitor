@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -50,24 +50,24 @@ public class PowerDataService {
         powerDataRepository.deleteById(id);
     }
 
-    public Map<String, Map<LocalDateTime, BigDecimal>> getMeasurementsByNames(List<String> measurementNames) {
-        List<PowerData> powerDataForLast24Hours  = getPowerDataForLast24Hours();
-        Map<String, Map<LocalDateTime, BigDecimal>> measurementsByName = new LinkedHashMap<>();
+    public Map<String, List<Measurement>> getMeasurementsByNames(List<String> measurementNames) {
+        List<PowerData> powerDataForLast24Hours = getPowerDataForLast24Hours();
+        Map<String, List<Measurement>> measurementsByName = new LinkedHashMap<>();
         for (String name : measurementNames) {
             Function<PowerData, BigDecimal> getter = POWER_DATA_SUPPLIERS.get(name);
-            Map<LocalDateTime, BigDecimal> abc = getMeasurements(powerDataForLast24Hours, getter);
-            measurementsByName.put(name, abc);
+            List<Measurement> measurements = getMeasurements(powerDataForLast24Hours, getter);
+            measurementsByName.put(name, measurements);
         }
         return measurementsByName;
     }
 
-    private Map<LocalDateTime, BigDecimal> getMeasurements(List<PowerData> powerDataForLast24Hours, Function<PowerData, BigDecimal> getter) {
-        Map<LocalDateTime, BigDecimal> measurements = new LinkedHashMap<>();
+    private List<Measurement> getMeasurements(List<PowerData> powerDataForLast24Hours, Function<PowerData, BigDecimal> getter) {
+        List<Measurement> measurements = new ArrayList<>();
         BigDecimal lastValue = null;
         for (PowerData pd : powerDataForLast24Hours) {
             BigDecimal currentValue = getter.apply(pd);
             if (currentValue != null && (lastValue == null || !lastValue.equals(currentValue))) {
-                measurements.put(pd.getDateTime(), currentValue);
+                measurements.add(new Measurement(pd.getDateTime(), currentValue));
                 lastValue = currentValue;
             }
         }
