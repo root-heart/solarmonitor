@@ -8,14 +8,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/powerData")
 @RequiredArgsConstructor
 public class PowerDataController {
+
+
 
     private final PowerDataService powerDataService;
 
@@ -41,4 +47,8 @@ public class PowerDataController {
         return powerDataService.savePowerData(chargeControllerRegisterConverter.convert(dto));
     }
 
+    @GetMapping("/measurements")
+    public Map<String, Map<LocalDateTime, BigDecimal>> getMeasurements(@RequestParam List<String> names) {
+        return powerDataService.getMeasurementsByNames(names);
+    }
 }
