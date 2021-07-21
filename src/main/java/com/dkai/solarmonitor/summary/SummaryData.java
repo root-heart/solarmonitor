@@ -1,6 +1,6 @@
 package com.dkai.solarmonitor.summary;
 
-import com.dkai.solarmonitor.powerdata.PowerData;
+import com.dkai.solarmonitor.powerdata.PowerDataEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,32 +24,32 @@ public class SummaryData {
     private LocalDate day;
     @Convert(converter = PowerDataListToJsonStringConverter.class)
     @Column(length = 1000)
-    private List<PowerData> powerData;
+    private List<PowerDataEntity> powerData;
 
     public BigDecimal getGeneratedEnergy() {
-        return getMax(PowerData::getGeneratedEnergyToday);
+        return getMax(PowerDataEntity::getGeneratedEnergyToday);
     }
 
     public BigDecimal getConsumedEnergy() {
-        return getMax(PowerData::getConsumedEnergyToday);
+        return getMax(PowerDataEntity::getConsumedEnergyToday);
     }
 
     public BigDecimal getMinBatteryVoltage() {
-        return getMin(PowerData::getBatteryVoltage);
+        return getMin(PowerDataEntity::getBatteryVoltage);
     }
 
     public BigDecimal getMaxBatteryVoltage() {
-        return getMax(PowerData::getBatteryVoltage);
+        return getMax(PowerDataEntity::getBatteryVoltage);
     }
 
-    private BigDecimal getMax(Function<PowerData, BigDecimal> valueGetMethod) {
+    private BigDecimal getMax(Function<PowerDataEntity, BigDecimal> valueGetMethod) {
         return powerData.stream()
                 .map(valueGetMethod)
                 .max(BigDecimal::compareTo)
                 .orElse(BigDecimal.ZERO);
     }
 
-    private BigDecimal getMin(Function<PowerData, BigDecimal> valueGetMethod) {
+    private BigDecimal getMin(Function<PowerDataEntity, BigDecimal> valueGetMethod) {
         return powerData.stream()
                 .map(valueGetMethod)
                 .min(BigDecimal::compareTo)

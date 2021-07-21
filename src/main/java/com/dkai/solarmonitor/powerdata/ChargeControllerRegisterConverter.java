@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 
 @Component
 public class ChargeControllerRegisterConverter {
-    public PowerData convert(ChargeControllerRegistersDto registersDto) {
-        PowerData powerData = new PowerData();
+    public PowerDataEntity convert(ChargeControllerRegistersDto registersDto) {
+        PowerDataEntity powerData = new PowerDataEntity();
         powerData.setDateTime(LocalDateTime.ofEpochSecond(registersDto.getSecondsSince1970(), 0, ZoneOffset.UTC));
 
         if (registersDto.getRegisters3100To3107().length() >= 38) {

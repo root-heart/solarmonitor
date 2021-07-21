@@ -1,43 +1,98 @@
 package com.dkai.solarmonitor.powerdata;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@Entity
-public class PowerData implements PowerDataInterface {
-    @Id
-    @GeneratedValue
-    private long id;
-    private LocalDateTime dateTime;
-    private BigDecimal solarVoltage;
-    private BigDecimal solarCurrent;
-    private BigDecimal solarPower;
-    private BigDecimal batteryVoltage;
-    private BigDecimal batteryCurrent;
-    private BigDecimal batteryPower;
+public interface PowerData {
+    long getId();
 
-    private BigDecimal loadVoltage;
-    private BigDecimal loadCurrent;
-    private BigDecimal loadPower;
+    void setId(long id);
 
-    private BigDecimal maximumInputVoltageToday;
-    private BigDecimal minimumInputVoltageToday;
-    private BigDecimal maximumBatteryVoltageToday;
-    private BigDecimal minimumBatteryVoltageToday;
-    private BigDecimal consumedEnergyToday;
-    private BigDecimal consumedEnergyThisMonth;
-    private BigDecimal consumedEnergyThisYear;
-    private BigDecimal totalConsumedEnergy;
-    private BigDecimal generatedEnergyToday;
-    private BigDecimal generatedEnergyThisMonth;
-    private BigDecimal generatedEnergyThisYear;
-    private BigDecimal totalGeneratedEnergy;
+    LocalDateTime getDateTime();
+
+    void setDateTime(LocalDateTime dateTime);
+
+    BigDecimal getSolarVoltage();
+
+    void setSolarVoltage(BigDecimal solarVoltage);
+
+    BigDecimal getSolarCurrent();
+
+    void setSolarCurrent(BigDecimal solarCurrent);
+
+    BigDecimal getSolarPower();
+
+    void setSolarPower(BigDecimal solarPower);
+
+    BigDecimal getBatteryVoltage();
+
+    void setBatteryVoltage(BigDecimal batteryVoltage);
+
+    BigDecimal getBatteryCurrent();
+
+    void setBatteryCurrent(BigDecimal batteryCurrent);
+
+    BigDecimal getBatteryPower();
+
+    void setBatteryPower(BigDecimal batteryPower);
+
+    BigDecimal getLoadVoltage();
+
+    void setLoadVoltage(BigDecimal loadVoltage);
+
+    BigDecimal getLoadCurrent();
+
+    void setLoadCurrent(BigDecimal loadCurrent);
+
+    BigDecimal getLoadPower();
+
+    void setLoadPower(BigDecimal loadPower);
+
+    BigDecimal getMaximumInputVoltageToday();
+
+    void setMaximumInputVoltageToday(BigDecimal maximumInputVoltageToday);
+
+    BigDecimal getMinimumInputVoltageToday();
+
+    void setMinimumInputVoltageToday(BigDecimal minimumInputVoltageToday);
+
+    BigDecimal getMaximumBatteryVoltageToday();
+
+    void setMaximumBatteryVoltageToday(BigDecimal maximumBatteryVoltageToday);
+
+    BigDecimal getMinimumBatteryVoltageToday();
+
+    void setMinimumBatteryVoltageToday(BigDecimal minimumBatteryVoltageToday);
+
+    BigDecimal getConsumedEnergyToday();
+
+    void setConsumedEnergyToday(BigDecimal consumedEnergyToday);
+
+    BigDecimal getConsumedEnergyThisMonth();
+
+    void setConsumedEnergyThisMonth(BigDecimal consumedEnergyThisMonth);
+
+    BigDecimal getConsumedEnergyThisYear();
+
+    void setConsumedEnergyThisYear(BigDecimal consumedEnergyThisYear);
+
+    BigDecimal getTotalConsumedEnergy();
+
+    void setTotalConsumedEnergy(BigDecimal totalConsumedEnergy);
+
+    BigDecimal getGeneratedEnergyToday();
+
+    void setGeneratedEnergyToday(BigDecimal generatedEnergyToday);
+
+    BigDecimal getGeneratedEnergyThisMonth();
+
+    void setGeneratedEnergyThisMonth(BigDecimal generatedEnergyThisMonth);
+
+    BigDecimal getGeneratedEnergyThisYear();
+
+    void setGeneratedEnergyThisYear(BigDecimal generatedEnergyThisYear);
+
+    BigDecimal getTotalGeneratedEnergy();
+
+    void setTotalGeneratedEnergy(BigDecimal totalGeneratedEnergy);
 }

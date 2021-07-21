@@ -25,12 +25,12 @@ public class PowerDataController {
     private final ChargeControllerRegisterConverter chargeControllerRegisterConverter;
 
     @GetMapping
-    public PowerData getCurrentPowerData() {
+    public PowerDataEntity getCurrentPowerData() {
         return powerDataService.getCurrentPowerData();
     }
 
     @GetMapping("/last24Hours")
-    public List<PowerData> getPowerDataForLast24Hours() {
+    public List<PowerDataEntity> getPowerDataForLast24Hours() {
         return powerDataService.getPowerDataForLast24Hours();
     }
 
@@ -40,7 +40,7 @@ public class PowerDataController {
     }
 
     @PostMapping
-    public PowerData postPowerData(@RequestBody ChargeControllerRegistersDto dto) {
+    public PowerDataEntity postPowerData(@RequestBody ChargeControllerRegistersDto dto) {
         return powerDataService.savePowerData(chargeControllerRegisterConverter.convert(dto));
     }
 

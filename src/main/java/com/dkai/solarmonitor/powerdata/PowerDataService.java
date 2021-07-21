@@ -17,23 +17,23 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class PowerDataService {
 
-    private static final Map<String, Function<PowerData, BigDecimal>> POWER_DATA_SUPPLIERS = new HashMap<>();
+    private static final Map<String, Function<PowerDataEntity, BigDecimal>> POWER_DATA_SUPPLIERS = new HashMap<>();
 
     static {
-        POWER_DATA_SUPPLIERS.put("pvpower", PowerData::getSolarPower);
-        POWER_DATA_SUPPLIERS.put("loadpower", PowerData::getLoadPower);
-        POWER_DATA_SUPPLIERS.put("collectedEnergyToday", PowerData::getGeneratedEnergyToday);
-        POWER_DATA_SUPPLIERS.put("consumedEnergyToday", PowerData::getConsumedEnergyToday);
-        POWER_DATA_SUPPLIERS.put("batteryVoltage", PowerData::getBatteryVoltage);
+        POWER_DATA_SUPPLIERS.put("pvpower", PowerDataEntity::getSolarPower);
+        POWER_DATA_SUPPLIERS.put("loadpower", PowerDataEntity::getLoadPower);
+        POWER_DATA_SUPPLIERS.put("collectedEnergyToday", PowerDataEntity::getGeneratedEnergyToday);
+        POWER_DATA_SUPPLIERS.put("consumedEnergyToday", PowerDataEntity::getConsumedEnergyToday);
+        POWER_DATA_SUPPLIERS.put("batteryVoltage", PowerDataEntity::getBatteryVoltage);
     }
 
     private final PowerDataRepository powerDataRepository;
 
-    public PowerData getCurrentPowerData() {
+    public PowerDataEntity getCurrentPowerData() {
         return powerDataRepository.findLatest();
     }
 
-    public PowerData savePowerData(PowerData powerData) {
+    public PowerDataEntity savePowerData(PowerDataEntity powerData) {
         return powerDataRepository.save(powerData);
     }
 
@@ -41,7 +41,7 @@ public class PowerDataService {
         return BigDecimal.valueOf(Integer.valueOf(s, 16), 2);
     }
 
-    public List<PowerData> getPowerDataForLast24Hours() {
+    public List<PowerDataEntity> getPowerDataForLast24Hours() {
         ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
         return powerDataRepository.getDataOfLast24Hours(now.minusDays(1).toLocalDateTime());
     }
@@ -51,20 +51,20 @@ public class PowerDataService {
     }
 
     public Map<String, List<Measurement>> getMeasurementsByNames(List<String> measurementNames) {
-        List<PowerData> powerDataForLast24Hours = getPowerDataForLast24Hours();
+        List<PowerDataEntity> powerDataForLast24Hours = getPowerDataForLast24Hours();
         Map<String, List<Measurement>> measurementsByName = new LinkedHashMap<>();
         for (String name : measurementNames) {
-            Function<PowerData, BigDecimal> getter = POWER_DATA_SUPPLIERS.get(name);
+            Function<PowerDataEntity, BigDecimal> getter = POWER_DATA_SUPPLIERS.get(name);
             List<Measurement> measurements = getMeasurements(powerDataForLast24Hours, getter);
             measurementsByName.put(name, measurements);
         }
         return measurementsByName;
     }
 
-    private List<Measurement> getMeasurements(List<PowerData> powerDataForLast24Hours, Function<PowerData, BigDecimal> getter) {
+    private List<Measurement> getMeasurements(List<PowerDataEntity> powerDataForLast24Hours, Function<PowerDataEntity, BigDecimal> getter) {
         List<Measurement> measurements = new ArrayList<>();
         BigDecimal lastValue = null;
-        for (PowerData pd : powerDataForLast24Hours) {
+        for (PowerDataEntity pd : powerDataForLast24Hours) {
             BigDecimal currentValue = getter.apply(pd);
             if (currentValue != null && (lastValue == null || !lastValue.equals(currentValue))) {
                 measurements.add(new Measurement(pd.getDateTime(), currentValue));

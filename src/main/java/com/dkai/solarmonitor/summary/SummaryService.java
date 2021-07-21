@@ -1,6 +1,6 @@
 package com.dkai.solarmonitor.summary;
 
-import com.dkai.solarmonitor.powerdata.PowerData;
+import com.dkai.solarmonitor.powerdata.PowerDataEntity;
 import com.dkai.solarmonitor.powerdata.PowerDataRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,8 +23,8 @@ public class SummaryService {
     @Scheduled(cron = "0 10 0 * * *")
     public void summarizePastData() {
         LocalDateTime startOfYesterday = LocalDate.now().atStartOfDay().plusDays(-1);
-        List<PowerData> dataBeforeYesterday = powerDataRepository.findAllByDateTimeBefore(startOfYesterday);
-        Map<LocalDate, List<PowerData>> powerDataPerDay = dataBeforeYesterday.stream()
+        List<PowerDataEntity> dataBeforeYesterday = powerDataRepository.findAllByDateTimeBefore(startOfYesterday);
+        Map<LocalDate, List<PowerDataEntity>> powerDataPerDay = dataBeforeYesterday.stream()
                 .collect(Collectors.groupingBy(it -> it.getDateTime().toLocalDate()));
         powerDataPerDay.forEach((day, powerDataList) -> {
             SummaryData summaryData = new SummaryData();

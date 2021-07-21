@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-public class MemoryEfficientPowerData implements PowerDataInterface {
+public class MemoryEfficientPowerData implements PowerData {
     private long id;
     private long dateTime;
     private short solarVoltage;
