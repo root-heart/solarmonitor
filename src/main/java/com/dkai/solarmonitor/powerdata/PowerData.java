@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-public class PowerData {
+public class PowerData implements PowerDataInterface {
     @Id
     @GeneratedValue
     private long id;
