@@ -6,12 +6,14 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Entity
+@Table(name = "power_data")
 public class PowerDataEntity implements PowerData {
     @Id
     @GeneratedValue

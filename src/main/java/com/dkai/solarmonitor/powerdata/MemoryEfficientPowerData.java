@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 public class MemoryEfficientPowerData implements PowerData {
+    private static final int SCALE = 2;
+
     private long id;
     private long dateTime;
     private short solarVoltage;
@@ -55,13 +57,7 @@ public class MemoryEfficientPowerData implements PowerData {
 
     @Override
     public BigDecimal getSolarVoltage() {
-        return new BigDecimal(BigInteger.valueOf(solarVoltage), 2);
-    }
-
-    private void throwExceptionIfScaleIsNotTwo(BigDecimal value) {
-        if (value.scale() != 2) {
-            throw new IllegalArgumentException("scale needs to be two to work");
-        }
+        return bigDecimal(solarVoltage);
     }
 
     @Override
@@ -72,7 +68,7 @@ public class MemoryEfficientPowerData implements PowerData {
 
     @Override
     public BigDecimal getSolarCurrent() {
-        return new BigDecimal(BigInteger.valueOf(solarCurrent), 2);
+        return bigDecimal(solarCurrent);
     }
 
     @Override
@@ -83,7 +79,7 @@ public class MemoryEfficientPowerData implements PowerData {
 
     @Override
     public BigDecimal getSolarPower() {
-        return new BigDecimal(BigInteger.valueOf(solarPower), 2);
+        return bigDecimal(solarPower);
     }
 
     @Override
@@ -94,7 +90,7 @@ public class MemoryEfficientPowerData implements PowerData {
 
     @Override
     public BigDecimal getBatteryVoltage() {
-        return new BigDecimal(BigInteger.valueOf(batteryVoltage), 2);
+        return bigDecimal(batteryVoltage);
     }
 
     @Override
@@ -105,7 +101,7 @@ public class MemoryEfficientPowerData implements PowerData {
 
     @Override
     public BigDecimal getBatteryCurrent() {
-        return new BigDecimal(BigInteger.valueOf(batteryCurrent), 2);
+        return bigDecimal(batteryCurrent);
     }
 
     @Override
@@ -116,7 +112,7 @@ public class MemoryEfficientPowerData implements PowerData {
 
     @Override
     public BigDecimal getBatteryPower() {
-        return new BigDecimal(BigInteger.valueOf(batteryPower), 2);
+        return bigDecimal(batteryPower);
     }
 
     @Override
@@ -127,7 +123,7 @@ public class MemoryEfficientPowerData implements PowerData {
 
     @Override
     public BigDecimal getLoadVoltage() {
-        return new BigDecimal(BigInteger.valueOf(loadVoltage), 2);
+        return bigDecimal(loadVoltage);
     }
 
     @Override
@@ -138,7 +134,7 @@ public class MemoryEfficientPowerData implements PowerData {
 
     @Override
     public BigDecimal getLoadCurrent() {
-        return new BigDecimal(BigInteger.valueOf(loadCurrent), 2);
+        return bigDecimal(loadCurrent);
     }
 
     @Override
@@ -149,7 +145,7 @@ public class MemoryEfficientPowerData implements PowerData {
 
     @Override
     public BigDecimal getLoadPower() {
-        return new BigDecimal(BigInteger.valueOf(loadPower), 2);
+        return bigDecimal(loadPower);
     }
 
     @Override
@@ -160,7 +156,7 @@ public class MemoryEfficientPowerData implements PowerData {
 
     @Override
     public BigDecimal getMaximumInputVoltageToday() {
-        return new BigDecimal(BigInteger.valueOf(maximumInputVoltageToday), 2);
+        return bigDecimal(maximumInputVoltageToday);
     }
 
     @Override
@@ -171,7 +167,7 @@ public class MemoryEfficientPowerData implements PowerData {
 
     @Override
     public BigDecimal getMinimumInputVoltageToday() {
-        return new BigDecimal(BigInteger.valueOf(minimumInputVoltageToday), 2);
+        return bigDecimal(minimumInputVoltageToday);
     }
 
     @Override
@@ -182,7 +178,7 @@ public class MemoryEfficientPowerData implements PowerData {
 
     @Override
     public BigDecimal getMaximumBatteryVoltageToday() {
-        return new BigDecimal(BigInteger.valueOf(maximumBatteryVoltageToday), 2);
+        return bigDecimal(maximumBatteryVoltageToday);
     }
 
     @Override
@@ -193,7 +189,7 @@ public class MemoryEfficientPowerData implements PowerData {
 
     @Override
     public BigDecimal getMinimumBatteryVoltageToday() {
-        return new BigDecimal(BigInteger.valueOf(minimumBatteryVoltageToday), 2);
+        return bigDecimal(minimumBatteryVoltageToday);
     }
 
     @Override
@@ -204,7 +200,7 @@ public class MemoryEfficientPowerData implements PowerData {
 
     @Override
     public BigDecimal getConsumedEnergyToday() {
-        return new BigDecimal(BigInteger.valueOf(consumedEnergyToday), 2);
+        return bigDecimal(consumedEnergyToday);
     }
 
     @Override
@@ -215,7 +211,7 @@ public class MemoryEfficientPowerData implements PowerData {
 
     @Override
     public BigDecimal getConsumedEnergyThisMonth() {
-        return new BigDecimal(BigInteger.valueOf(consumedEnergyThisMonth), 2);
+        return bigDecimal(consumedEnergyThisMonth);
     }
 
     @Override
@@ -226,7 +222,7 @@ public class MemoryEfficientPowerData implements PowerData {
 
     @Override
     public BigDecimal getConsumedEnergyThisYear() {
-        return new BigDecimal(BigInteger.valueOf(consumedEnergyThisYear), 2);
+        return bigDecimal(consumedEnergyThisYear);
     }
 
     @Override
@@ -237,7 +233,7 @@ public class MemoryEfficientPowerData implements PowerData {
 
     @Override
     public BigDecimal getTotalConsumedEnergy() {
-        return new BigDecimal(BigInteger.valueOf(totalConsumedEnergy), 2);
+        return bigDecimal(totalConsumedEnergy);
     }
 
     @Override
@@ -248,7 +244,7 @@ public class MemoryEfficientPowerData implements PowerData {
 
     @Override
     public BigDecimal getGeneratedEnergyToday() {
-        return new BigDecimal(BigInteger.valueOf(generatedEnergyToday), 2);
+        return bigDecimal(generatedEnergyToday);
     }
 
     @Override
@@ -259,7 +255,7 @@ public class MemoryEfficientPowerData implements PowerData {
 
     @Override
     public BigDecimal getGeneratedEnergyThisMonth() {
-        return new BigDecimal(BigInteger.valueOf(generatedEnergyThisMonth), 2);
+        return bigDecimal(generatedEnergyThisMonth);
     }
 
     @Override
@@ -270,7 +266,7 @@ public class MemoryEfficientPowerData implements PowerData {
 
     @Override
     public BigDecimal getGeneratedEnergyThisYear() {
-        return new BigDecimal(BigInteger.valueOf(generatedEnergyThisYear), 2);
+        return bigDecimal(generatedEnergyThisYear);
     }
 
     @Override
@@ -281,12 +277,22 @@ public class MemoryEfficientPowerData implements PowerData {
 
     @Override
     public BigDecimal getTotalGeneratedEnergy() {
-        return new BigDecimal(BigInteger.valueOf(totalGeneratedEnergy), 2);
+        return bigDecimal(totalGeneratedEnergy);
     }
 
     @Override
     public void setTotalGeneratedEnergy(BigDecimal totalGeneratedEnergy) {
         throwExceptionIfScaleIsNotTwo(totalGeneratedEnergy);
         this.totalGeneratedEnergy = totalGeneratedEnergy.unscaledValue().intValue();
+    }
+
+    private void throwExceptionIfScaleIsNotTwo(BigDecimal value) {
+        if (value.scale() != SCALE) {
+            throw new IllegalArgumentException("scale needs to be two to work");
+        }
+    }
+
+    private BigDecimal bigDecimal(int value) {
+        return new BigDecimal(BigInteger.valueOf(value), SCALE);
     }
 }

@@ -1,7 +1,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/luxon@1.22.2/build/global/luxon.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@0.2.1"></script>
 </head>
@@ -9,8 +9,8 @@
 
 
 <div class="grid-container">
-    <div>
-        <canvas id="powerChart"></canvas>
+    <div style="grid-row: 1 / 4">
+        <canvas id="chart"></canvas>
     </div>
     <div>
         <h1>Current Power in Watts</h1>
@@ -29,9 +29,6 @@
             </tr>
         </table>
     </div>
-    <div>
-        <canvas id="energyChart"></canvas>
-    </div>
     <div id="energySummary">
         <h1>Energy in kWh</h1>
         <table>
@@ -48,9 +45,6 @@
                 <td id="overallEnergy"></td>
             </tr>
         </table>
-    </div>
-    <div>
-        <canvas id="batteryVoltageChart"></canvas>
     </div>
     <div id="batterySummary">
         <h1>Current Battery Status</h1>
