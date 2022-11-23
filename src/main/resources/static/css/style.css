@@ -6,10 +6,16 @@ html {
 
 .grid-container {
     display: grid;
-    grid-template-columns: 68vw 28vw;
-    grid-template-rows: 13vw 13vw 13vw;
-    grid-gap: 1vw;
+    grid-template-columns: calc(100% - 22rem) 20rem;
+    grid-template-rows: 20vh 20vh 20vh;
+    grid-gap: 1rem;
     justify-content: center;
+}
+
+div.summary {
+    display: grid;
+    grid-template-columns: 45% 45%;
+    grid-gap: 1rem;
 }
 
 .ct-label.ct-horizontal.ct-end {

@@ -196,6 +196,104 @@ function showPowerDataSummary(powerData) {
     document.getElementById("minimumBatteryVoltage").textContent = numberFormat.format(powerData.minimumBatteryVoltageToday);
 }
 
+function drawSummaryChart(summaryData) {
+    new Chart(document.getElementById("dailySummaryChart"), {
+        type: 'bar',
+        data: {
+            labels: summaryData.dailySummary.map(d => luxon.DateTime.utc(d.year, d.month, d.day)),
+            datasets: [
+                {
+                    label: "energy",
+                    data: summaryData.dailySummary.map(d => d.energyThisDay),
+                    borderColor: 'rgb(255, 199, 132)',
+                    backgroundColor: 'rgb(255, 199, 132)'
+                }
+            ]
+        },
+        options: {
+            plugins: {legend: {display: false}},
+            scales: {
+                x: {
+                    display: true,
+                    type: 'time',
+                    time: {
+                        unit: 'day',
+                        displayFormats: {
+                            day: 'dd.MM.'
+                        }
+                    },
+                    grid: {
+                        color: 'hsla(0, 0%, 40%, 0.3)',
+                        borderColor: 'hsl(0, 0%, 40%)',
+                    },
+                    ticks: {
+                        autoSkip: false,
+                        maxRotation: 0,
+                        callback: (value, index, ticks) => {
+                            if (value.startsWith("01.")) {
+                                return value
+                            } else {
+                                return null
+                            }
+                            // if (value.day !== 1) { return null } else { return value }
+                        }
+                    }
+                },
+                y: {
+                    grid: {
+                        color: 'hsla(0, 0%, 40%, 0.3)',
+                        borderColor: 'hsl(0, 0%, 40%)',
+                    },
+                }
+            }
+        }
+    })
+
+    new Chart(document.getElementById("monthlySummaryChart"), {
+        type: 'bar',
+        data: {
+            labels: summaryData.monthlySummary.map(d => luxon.DateTime.utc(d.year, d.month)),
+            datasets: [
+                {
+                    label: "energy",
+                    data: summaryData.monthlySummary.map(d => d.energyThisMonth),
+                    borderColor: 'rgb(255, 199, 132)',
+                    backgroundColor: 'rgb(255, 199, 132)'
+                }
+            ]
+        },
+        options: {
+            plugins: {legend: {display: false}},
+            scales: {
+                x: {
+                    display: true,
+                    type: 'time',
+                    time: {
+                        unit: 'month',
+                        displayFormats: {
+                            day: 'MMMM'
+                        }
+                    },
+                    ticks: {
+                        maxRotation: 0,
+                    },
+                    grid: {
+                        color: 'hsla(0, 0%, 40%, 0.3)',
+                        borderColor: 'hsl(0, 0%, 40%)',
+                    },
+                },
+                y: {
+                    grid: {
+                        color: 'hsla(0, 0%, 40%, 0.3)',
+                        borderColor: 'hsl(0, 0%, 40%)',
+                    },
+                }
+            }
+        }
+    })
+}
+
 loadAndDisplayData("/powerData/last24Hours", drawPowerHistory);
 loadAndDisplayData("/powerData", showPowerDataSummary);
 
+loadAndDisplayData("/powerData/summarized/2022", drawSummaryChart)

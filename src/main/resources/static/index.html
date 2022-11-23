@@ -13,7 +13,7 @@
         <canvas id="chart"></canvas>
     </div>
     <div>
-        <h1>Current Power in Watts</h1>
+        <h1>Power (W)</h1>
         <table>
             <tr>
                 <td>PV</td>
@@ -30,7 +30,7 @@
         </table>
     </div>
     <div id="energySummary">
-        <h1>Energy in kWh</h1>
+        <h1>Energy (kWh)</h1>
         <table>
             <tr>
                 <td>Collected Today</td>
@@ -47,7 +47,7 @@
         </table>
     </div>
     <div id="batterySummary">
-        <h1>Current Battery Status</h1>
+        <h1>Battery (V)</h1>
         <table>
             <tr>
                 <td>Current Voltage</td>
@@ -64,6 +64,16 @@
         </table>
     </div>
 </div>
+
+<div class="summary">
+    <div>
+        <canvas id="dailySummaryChart"></canvas>
+    </div>
+    <div>
+        <canvas id="monthlySummaryChart"></canvas>
+    </div>
+</div>
+
 
 <script src="js/script.js"></script>
 </body>
