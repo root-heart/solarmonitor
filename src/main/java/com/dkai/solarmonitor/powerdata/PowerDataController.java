@@ -55,14 +55,14 @@ public class PowerDataController {
         return powerDataService.getMeasurementsByNames(names);
     }
 
-    @GetMapping("/summarized/{year}")
-    public SummarizedPowerData getSummarizedPowerData(@PathVariable("year") int year) {
+    @GetMapping("/summarized")
+    public SummarizedPowerData getSummarizedPowerData() {
         String dailySummarySql = "select extract(year from date_time)     as year, " +
                                  " extract(month from date_time)    as month, " +
                                  " extract(day from date_time)      as day, " +
                                  " max(generated_energy_today)      as energy_this_day " +
                                  " from power_data " +
-                                 " where extract(year from date_time) = ? " +
+                                 " where date_time >= current_timestamp - interval '1 month' " +
                                  " group by extract(year from date_time), " +
                                  "         extract(month from date_time), " +
                                  "         extract(day from date_time) " +
@@ -71,7 +71,6 @@ public class PowerDataController {
                                    " extract(month from date_time)    as month, " +
                                    " max(generated_energy_this_month) as energy_this_month " +
                                    " from power_data " +
-                                   " where extract(year from date_time) = ? " +
                                    " group by extract(year from date_time), " +
                                    "         extract(month from date_time) " +
                                    " order by 1, 2";
@@ -82,8 +81,6 @@ public class PowerDataController {
              var stmtDailySummary = conn.prepareStatement(dailySummarySql);
              var stmtMonthlySummary = conn.prepareStatement(monthlySummarySql)
         ) {
-            stmtDailySummary.setInt(1, year);
-            stmtMonthlySummary.setInt(1, year);
             try (var rs = stmtDailySummary.executeQuery()) {
                 while (rs.next()) {
                     var dailySummary = new SummarizedPowerData.DailySummary(

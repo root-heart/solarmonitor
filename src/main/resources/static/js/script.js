@@ -109,6 +109,11 @@ function drawBatteryHistory(powerDataList) {
     };
 
     const options = {
+        datasets: {
+            line: {
+                borderJoinStyle: "bevel",
+            }
+        },
         animation: false,
         maintainAspectRatio: false,
         plugins: {legend: {display: false}},
@@ -205,8 +210,8 @@ function drawSummaryChart(summaryData) {
                 {
                     label: "energy",
                     data: summaryData.dailySummary.map(d => d.energyThisDay),
-                    borderColor: 'rgb(255, 199, 132)',
-                    backgroundColor: 'rgb(255, 199, 132)'
+                    borderColor: 'hsl(205, 20%, 55%)',
+                    backgroundColor: 'hsl(205, 20%, 55%)'
                 }
             ]
         },
@@ -226,18 +231,6 @@ function drawSummaryChart(summaryData) {
                         color: 'hsla(0, 0%, 40%, 0.3)',
                         borderColor: 'hsl(0, 0%, 40%)',
                     },
-                    ticks: {
-                        autoSkip: false,
-                        maxRotation: 0,
-                        callback: (value, index, ticks) => {
-                            if (value.startsWith("01.")) {
-                                return value
-                            } else {
-                                return null
-                            }
-                            // if (value.day !== 1) { return null } else { return value }
-                        }
-                    }
                 },
                 y: {
                     grid: {
@@ -257,8 +250,8 @@ function drawSummaryChart(summaryData) {
                 {
                     label: "energy",
                     data: summaryData.monthlySummary.map(d => d.energyThisMonth),
-                    borderColor: 'rgb(255, 199, 132)',
-                    backgroundColor: 'rgb(255, 199, 132)'
+                    borderColor: 'hsl(205, 20%, 55%)',
+                    backgroundColor: 'hsl(205, 20%, 55%)'
                 }
             ]
         },
@@ -296,4 +289,4 @@ function drawSummaryChart(summaryData) {
 loadAndDisplayData("/powerData/last24Hours", drawPowerHistory);
 loadAndDisplayData("/powerData", showPowerDataSummary);
 
-loadAndDisplayData("/powerData/summarized/2022", drawSummaryChart)
+loadAndDisplayData("/powerData/summarized", drawSummaryChart)
