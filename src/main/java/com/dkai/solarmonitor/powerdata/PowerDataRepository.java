@@ -10,8 +10,7 @@ import java.util.List;
 public interface PowerDataRepository extends JpaRepository<PowerDataEntity, Long> {
     List<PowerDataEntity> findAllByDateTimeBetween(LocalDateTime from, LocalDateTime to);
 
-    @Query("select p from PowerDataEntity p where p.id = (select max(id) from PowerDataEntity)")
-    PowerDataEntity findLatest();
+    PowerDataEntity findFirstByOrderByDateTimeDesc();
 
     @Query(
             value = "select * from power_data " +

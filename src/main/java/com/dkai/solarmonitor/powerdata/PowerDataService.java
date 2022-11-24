@@ -30,7 +30,7 @@ public class PowerDataService {
     private final PowerDataRepository powerDataRepository;
 
     public PowerDataEntity getCurrentPowerData() {
-        return powerDataRepository.findLatest();
+        return powerDataRepository.findFirstByOrderByDateTimeDesc();
     }
 
     public PowerDataEntity savePowerData(PowerDataEntity powerData) {
