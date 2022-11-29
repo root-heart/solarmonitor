@@ -19,5 +19,7 @@ public interface PowerDataRepository extends JpaRepository<PowerDataEntity, Long
             nativeQuery = true)
     List<PowerDataEntity> getDataOfLast24Hours(@Param("from") LocalDateTime from);
 
+    List<PowerDataEntity> findAllByDateTimeAfter(LocalDateTime from);
+
     List<PowerDataEntity> findAllByDateTimeBefore(LocalDateTime when);
 }

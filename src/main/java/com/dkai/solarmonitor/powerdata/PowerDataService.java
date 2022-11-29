@@ -28,6 +28,8 @@ public class PowerDataService {
     }
 
     private final PowerDataRepository powerDataRepository;
+    private final DailySummaryRepository dailySummaryRepository;
+    private final MonthlySummaryRepository monthlySummaryRepository;
 
     public PowerDataEntity getCurrentPowerData() {
         return powerDataRepository.findFirstByOrderByDateTimeDesc();
@@ -43,7 +45,15 @@ public class PowerDataService {
 
     public List<PowerDataEntity> getPowerDataForLast24Hours() {
         ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
-        return powerDataRepository.getDataOfLast24Hours(now.minusDays(1).toLocalDateTime());
+        return powerDataRepository.findAllByDateTimeAfter(now.minusDays(1).toLocalDateTime());
+    }
+
+    public List<DailySummaryEntity> getDailySummary() {
+        return dailySummaryRepository.findAll();
+    }
+
+    public List<MonthlySummaryEntity> getOverallSummary() {
+        return monthlySummaryRepository.findAll();
     }
 
     public void delete(long id) {
