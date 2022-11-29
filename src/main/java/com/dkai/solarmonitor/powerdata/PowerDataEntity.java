@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "power_data")
-public class PowerDataEntity implements PowerData {
+public class PowerDataEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "power_data_id_seq")
     private long id;
