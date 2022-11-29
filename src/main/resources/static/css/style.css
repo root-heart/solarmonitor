@@ -6,107 +6,27 @@ html {
 
 .grid-container {
     display: grid;
-    grid-template-columns: calc(100% - 22rem) 20rem;
-    grid-template-rows: 20vh 20vh 20vh;
+    grid-template-columns: repeat(3, 30%);
     grid-gap: 1rem;
     justify-content: center;
 }
 
-div.summary {
-    display: grid;
-    grid-template-columns: 45% 45%;
-    grid-gap: 1rem;
-}
-
-.ct-label.ct-horizontal.ct-end {
-    transform: translate(-50%, 0);
-    display: block;
+.grid-container>div {
     text-align: center;
 }
 
-.ct-label.ct-vertical.ct-start {
-    display: inline-flex;
-    transform: translate(0, 50%);
-    align-items: center;
-    alignment: right;
+.grid-container>div>h1 {
+    font-size: 1rem;
 }
 
-.ct-slice-donut {
-    fill: none;
+span.currentValue {
+    font-size: 4rem;
 }
 
-.ct-line {
-    fill: none;
-    stroke-width: 2px;
+span.minValueToday {
+    font-size: 2rem;
 }
 
-.ct-area {
-    stroke: none;
-    fill-opacity: 0.3;
-}
-
-.ct-series-a {
-    stroke: #1BB744;
-}
-
-.ct-series-a .ct-area {
-    fill: #1BB744;
-}
-
-.ct-series-b {
-    stroke: red;
-}
-
-.ct-series-b .ct-area {
-    fill: none;
-}
-
-.ct-series-c {
-    stroke: blue;
-}
-
-.ct-series-c .ct-area {
-    fill: none;
-}
-
-.ct-series-d {
-    stroke: yellow;
-}
-
-.ct-series-d .ct-area {
-    fill: none;
-}
-
-.gauge path {
-    transform: scale(2);
-    transform-origin: 50% 0;
-}
-
-.gauge .ct-series-b, .ct-grid {
-    stroke: #5B5B59;
-}
-
-.gauge .ct-fill-donut-label {
-    text-align: center;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-}
-
-.gauge .ct-fill-donut-label .title {
-    font: 15px sans-serif;
-    /*position: absolute;*/
-    bottom: 8%;
-    right: 69%;
-}
-
-.gauge .ct-fill-donut-label .value {
-    font: bold 42px sans-serif;
-    /*position: absolute;*/
-    display: inline-block;
-    bottom: 0;
-    left: 33%;
-    right: 33%;
+span.maxValueToday {
+    font-size: 2rem;
 }
