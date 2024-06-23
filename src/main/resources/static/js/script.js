@@ -11,136 +11,180 @@ function loadAndDisplayData(path, displayCallback) {
 }
 
 function drawHistory(powerDataList) {
-    drawBatteryHistory(powerDataList);
-    drawPowerHistory(powerDataList)
-}
+    let solarPowers = powerDataList.map(p => [luxon.DateTime.fromISO(p.dateTime, {zone: "utc"}).toJSDate().getTime(), p.solarPower])
+    console.log(solarPowers)
+    let solarVoltages = powerDataList.map(p => [luxon.DateTime.fromISO(p.dateTime, {zone: "utc"}).toJSDate().getTime(), p.solarVoltage])
+    let solarCurrents = powerDataList.map(p => [luxon.DateTime.fromISO(p.dateTime, {zone: "utc"}).toJSDate().getTime(), p.solarCurrent])
 
-function drawBatteryHistory(powerDataList) {
-    let labels = powerDataList.map(powerData => luxon.DateTime.fromISO(powerData.dateTime, {zone: "utc"}).setZone('Europe/Berlin'))
-    let voltages = powerDataList.map(powerData => powerData.batteryVoltage)
-    new Chart(
-        document.getElementById('batteryHistory'), {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Battery Voltage',
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderWidth: 2,
-                    fill: true,
-                    data: voltages,
-                    pointStyle: 'none'
-                }]
-            },
-            options: chartOptions()
+    let batteryVoltages = powerDataList.map(p => [luxon.DateTime.fromISO(p.dateTime, {zone: "utc"}).toJSDate().getTime(), p.batteryVoltage])
+
+    let collectedEnergy = powerDataList.map(p => [luxon.DateTime.fromISO(p.dateTime, {zone: "utc"}).toJSDate().getTime(), p.generatedEnergyToday])
+
+    Highcharts.setOptions({
+        time: {
+            timezone: 'Europe/Berlin'
         }
-    );
-}
+    });
 
-function drawPowerHistory(powerDataList) {
-    let labels = powerDataList.map(powerData => luxon.DateTime.fromISO(powerData.dateTime, {zone: "utc"}).setZone('Europe/Berlin'))
-    let solarPowers = powerDataList.map(powerData => powerData.solarPower)
-    new Chart(
-        document.getElementById('powerHistory'), {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'PV Power',
-                    borderColor: 'rgb(255, 199, 132)',
-                    backgroundColor: 'rgba(255, 199, 132, 0.2)',
-                    fill: true,
-                    borderWidth: 2,
-                    data: solarPowers,
-                    pointStyle: 'none'
-                }]
-            },
-            options: chartOptions()
-        }
-    )
-}
-
-function drawEnergyHistory(summary) {
-    let labels = summary.dailySummary.map(dailySummary => luxon.DateTime.fromObject({
-        year: dailySummary.year,
-        month: dailySummary.month,
-        day: dailySummary.day
-    }).setZone('Europe/Berlin'))
-    let energies = summary.dailySummary.map(dailySummary => dailySummary.energyThisDay)
-    let options = chartOptions()
-    options.scales.x.time.unit = "day"
-    options.scales.x.time.displayFormats = {day: "dd.MM."}
-    console.log(labels)
-    console.log(energies)
-    new Chart(
-        document.getElementById('energyHistory'), {
-            type: 'bar',
-            data: {
-                labels: labels, datasets: [{
-                    label: 'Collected Energy',
-                    borderColor: 'hsl(205, 20%, 55%)',
-                    backgroundColor: 'hsla(205, 20%, 55%, 0.4)',
-                    fill: true,
-                    borderWidth: 2,
-                    data: energies,
-                    pointStyle: 'none'
-                }]
-            },
-            options: options
-        }
-    )
-}
-
-function chartOptions() {
-    return {
-        datasets: {
-            line: {
-                borderJoinStyle: "bevel",
-            }
+    Highcharts.chart('powerHistory', {
+        chart: {
+            backgroundColor: "none"
         },
-        elements: {
-            point: {
-                borderWidth: 0,
-                radius: 0,
-                hitRadius: 10,
-                hoverRadius: 10,
-                color: 'rgba(0,0,0,0)',
-                backgroundColor: 'rgba(0,0,0,0)'
-            }
+        legend: {
+            enabled: false
         },
-        plugins: {
-            legend: {
-                display: false
-            }
+        title: {
+            text: ""
         },
-        animation: false,
-        scales: {
-            x: {
-                display: true,
-                type: 'time',
-                time: {
-                    unit: 'hour',
-                    displayFormats: {
-                        hour: 'HH:mm'
-                    }
-                },
-                grid: {
-                    color: 'hsla(0, 0%, 40%, 0.3)',
-                    borderColor: 'hsl(0, 0%, 40%)',
-                },
-                ticks: {
-                    // display: false
+        xAxis: [{
+            type: "datetime",
+            gridLineWidth: 1,
+            gridLineColor: 'hsla(0, 0%, 40%, 0.3)',
+            labels: {
+                style: {
+                    color: "#ccc"
                 }
             },
-            y: {
-                grid: {
-                    color: 'hsla(0, 0%, 40%, 0.3)',
-                    borderColor: 'hsl(0, 0%, 40%)',
-                },
-            }
-        }
-    }
+            lineWidth: 0
+        }],
+        yAxis: [{
+            height: "25%",
+            title: {
+                text: "PV Power",
+                style: {
+                    color: "#ccc"
+                }
+            },
+            offset: 0,
+            gridLineColor: 'hsla(0, 0%, 40%, 0.3)',
+            labels: {
+                style: {
+                    color: "#ccc"
+                }
+            },
+            plotLines: [{
+                color: "#ccc",
+                width: 1,
+                value: 0
+            }]
+        }, {
+            height: "19%",
+            top: "27%",
+            title: {
+                text: "PV Voltage",
+                style: {
+                    color: "#ccc"
+                }
+            },
+            offset: 0,
+            gridLineColor: 'hsla(0, 0%, 40%, 0.3)',
+            labels: {
+                style: {
+                    color: "#ccc"
+                }
+            },
+            plotLines: [{
+                color: "#ccc",
+                width: 1,
+                value: 0
+            }]
+        }, {
+            height: "19%",
+            top: "27%",
+            title: {
+                text: "PV Current",
+                style: {
+                    color: "#ccc"
+                }
+            },
+            opposite: true,
+            offset: 0,
+            gridLineColor: 'hsla(0, 0%, 40%, 0.3)',
+            labels: {
+                style: {
+                    color: "#ccc"
+                }
+            },
+            plotLines: [{
+                color: "#ccc",
+                width: 1,
+                value: 0
+            }]
+        }, {
+            height: "25%",
+            top: "48%",
+            title: {
+                text: "Battery Voltage",
+                style: {
+                    color: "#ccc"
+                }
+            },
+            offset: 0,
+            min: 25,
+            max: 28,
+            gridLineColor: 'hsla(0, 0%, 40%, 0.3)',
+            labels: {
+                style: {
+                    color: "#ccc"
+                }
+            },
+            plotLines: [{
+                color: "#ccc",
+                width: 1,
+                value: 25
+            }]
+        }, {
+            height: "25%",
+            top: "75%",
+            title: {
+                text: "Collected Energy",
+                style: {
+                    color: "#ccc"
+                }
+            },
+            offset: 0,
+            gridLineColor: 'hsla(0, 0%, 40%, 0.3)',
+            labels: {
+                style: {
+                    color: "#ccc"
+                }
+            },
+            plotLines: [{
+                color: "#ccc",
+                width: 1,
+                value: 0
+            }]
+        }],
+        series: [{
+            type: "area",
+            yAxis: 0,
+            data: solarPowers,
+            color: "rgb(255, 199, 132)",
+            fillColor: "rgba(255, 199, 132, 0.2)",
+        }, {
+            type: "line",
+            yAxis: 1,
+            data: solarVoltages,
+            lineWidth: 1,
+        }, {
+            type: "line",
+            yAxis: 2,
+            data: solarCurrents,
+            lineWidth: 1,
+        }, {
+            type: "area",
+            yAxis: 3,
+            data: batteryVoltages,
+            color: "rgb(255, 99, 132)",
+            fillColor: "rgba(255, 99, 132, 0.2)",
+        }, {
+            type: "area",
+            yAxis: 4,
+            data: collectedEnergy,
+            color: "hsl(205, 20%, 55%)",
+            fillColor: "hsla(205, 20%, 55%, 0.2)",
+        }]
+    })
 }
 
 function showPowerDataSummary(powerData) {
@@ -154,4 +198,3 @@ function showPowerDataSummary(powerData) {
 
 loadAndDisplayData("/powerData/last24Hours", drawHistory);
 loadAndDisplayData("/powerData", showPowerDataSummary);
-loadAndDisplayData("/powerData/summarized", drawEnergyHistory)

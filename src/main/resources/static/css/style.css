@@ -6,9 +6,15 @@ html {
 
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(3, 30%);
+    grid-template-rows: repeat(3, 30%);
     grid-gap: 1rem;
     justify-content: center;
+}
+
+.measurementHistory {
+    height: 60rem;
+    display: grid;
+    grid-template-columns: 20rem calc(100% - 20rem);
 }
 
 .grid-container>div {
@@ -29,4 +35,8 @@ span.minValueToday {
 
 span.maxValueToday {
     font-size: 2rem;
+}
+
+#powerHistory {
+    height: 80vh;
 }

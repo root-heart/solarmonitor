@@ -1,39 +1,33 @@
 <html lang="EN">
 <head>
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/luxon@1.22.2/build/global/luxon.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@0.2.1"></script>
     <title>Solarmonitor</title>
 </head>
 <body>
 
-
-<div class="grid-container">
-    <div>
-        <h1>PV Power Watts</h1>
-        <span class="currentValue" id="currentPvPower"></span>
-    </div>
-    <div>
-        <h1>Battery Voltage</h1>
-        <span class="minValueToday" id="minimumBatteryVoltage"></span>
-        <span class="currentValue" id="currentBatteryVoltage"></span>
-        <span class="maxValueToday" id="maximumBatteryVoltage"></span>
-    </div>
-    <div>
-        <h1>Collected Energy Today</h1>
-        <span class="currentValue" id="generatedEnergy"></span>
-    </div>
-    <div>
-        <canvas id="powerHistory"></canvas>
-    </div>
-    <div>
-        <canvas id="batteryHistory"></canvas>
-    </div>
-    <div>
-        <canvas id="energyHistory"></canvas>
-    </div>
+<div>
+    <h1>PV Power Watts</h1>
+    <span class="currentValue" id="currentPvPower"></span>
 </div>
+
+<div>
+    <h1>Battery Voltage</h1>
+    <span class="minValueToday" id="minimumBatteryVoltage"></span>
+    <span class="currentValue" id="currentBatteryVoltage"></span>
+    <span class="maxValueToday" id="maximumBatteryVoltage"></span>
+</div>
+
+<div>
+    <h1>Collected Energy Today</h1>
+    <span class="currentValue" id="generatedEnergy"></span>
+</div>
+
+<div id="powerHistory"></div>
 
 <script src="js/script.js"></script>
 </body>
