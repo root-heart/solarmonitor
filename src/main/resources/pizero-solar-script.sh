@@ -34,6 +34,6 @@ echo "Posting data ($time_in_seconds: $registers_3100_to_3107, $registers_310c_t
 
 curl -H "Content-Type: application/json" --request POST \
   --data "{\"secondsSince1970\": $time_in_seconds, \"registers3100To3107\": \"$registers_3100_to_3107\", \"registers310cTo3111\": \"$registers_310c_to_3111\", \"registers3300To330b\": \"$registers_3300_to_330b\", \"registers330cTo3313\": \"$registers_330c_to_3313\"}" \
-   https://root-heart-solarmonitor.herokuapp.com/power
+   https://89.58.49.49:8080/powerData
 
 echo "Data posted, script finished :)"
