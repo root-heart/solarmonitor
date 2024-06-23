@@ -1,9 +1,11 @@
 package com.dkai.solarmonitor.powerdata;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -36,6 +38,17 @@ public class PowerDataService {
     }
 
     public PowerDataEntity savePowerData(PowerDataEntity powerData) {
+        LocalDate date = powerData.getDateTime().toLocalDate();
+        DailySummaryEntity dailySummary = dailySummaryRepository.findByDate(date);
+        if (dailySummary == null) {
+            dailySummary = new DailySummaryEntity();
+            dailySummary.setDate(date);
+        }
+        DailySummaryFiller dailySummaryFiller = new DailySummaryFiller(powerData, dailySummary);
+
+        dailySummary.setConsumedEnergy(dailySummaryFiller.getMax(PowerDataEntity::getConsumedEnergyToday, DailySummaryEntity::getConsumedEnergy));
+        dailySummary.setGeneratedEnergy(dailySummaryFiller.getMax(PowerDataEntity::getGeneratedEnergyToday, DailySummaryEntity::getGeneratedEnergy));
+
         return powerDataRepository.save(powerData);
     }
 
@@ -84,4 +97,22 @@ public class PowerDataService {
         return measurements;
     }
 
+    @AllArgsConstructor
+    private class DailySummaryFiller {
+        private final PowerDataEntity powerData;
+        private final DailySummaryEntity dailySummary;
+
+        private BigDecimal getMax(Function<PowerDataEntity, BigDecimal> getter1,
+                                  Function<DailySummaryEntity, BigDecimal> getter2) {
+            BigDecimal powerDataValue = getter1.apply(powerData);
+            BigDecimal dailySummaryValue = getter2.apply(dailySummary);
+            if (powerDataValue != null && dailySummaryValue != null) {
+                return powerDataValue.max(dailySummaryValue);
+            }
+            if (powerDataValue != null) {
+                return powerDataValue;
+            }
+            return dailySummaryValue;
+        }
+    }
 }
