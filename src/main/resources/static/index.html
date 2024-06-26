@@ -10,24 +10,26 @@
 </head>
 <body>
 
-<div>
-    <h1>PV Power Watts</h1>
-    <span class="currentValue" id="currentPvPower"></span>
-</div>
+<div id="overview">
+    <div id="pvInput">
+        <h1>PV Power</h1>
+        <span class="currentValue" id="currentPvPower"> Watt</span>
+    </div>
 
-<div>
-    <h1>Battery Voltage</h1>
-    <span class="minValueToday" id="minimumBatteryVoltage"></span>
-    <span class="currentValue" id="currentBatteryVoltage"></span>
-    <span class="maxValueToday" id="maximumBatteryVoltage"></span>
-</div>
+    <div id="batteryStatus">
+        <h1>Battery Status</h1>
+        <span class="minValueToday" id="minimumBatteryVoltage"> Volt</span>
+        <span class="currentValue" id="currentBatteryVoltage"> Volt</span>
+        <span class="maxValueToday" id="maximumBatteryVoltage"> Volt</span>
+    </div>
 
-<div>
-    <h1>Collected Energy Today</h1>
-    <span class="currentValue" id="generatedEnergy"></span>
-</div>
+    <div id="currentEnergy">
+        <h1>Collected Energy</h1>
+        <span class="currentValue" id="generatedEnergy"> kWh</span>
+    </div>
 
-<div id="powerHistory"></div>
+    <div id="overviewChart"></div>
+</div>
 
 <script src="js/script.js"></script>
 </body>

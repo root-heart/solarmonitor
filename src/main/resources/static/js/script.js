@@ -10,181 +10,112 @@ function loadAndDisplayData(path, displayCallback) {
     request.send();
 }
 
-function drawHistory(powerDataList) {
+function drawOverviewChart(powerDataList) {
     let solarPowers = powerDataList.map(p => [luxon.DateTime.fromISO(p.dateTime, {zone: "utc"}).toJSDate().getTime(), p.solarPower])
-    console.log(solarPowers)
-    let solarVoltages = powerDataList.map(p => [luxon.DateTime.fromISO(p.dateTime, {zone: "utc"}).toJSDate().getTime(), p.solarVoltage])
-    let solarCurrents = powerDataList.map(p => [luxon.DateTime.fromISO(p.dateTime, {zone: "utc"}).toJSDate().getTime(), p.solarCurrent])
-
     let batteryVoltages = powerDataList.map(p => [luxon.DateTime.fromISO(p.dateTime, {zone: "utc"}).toJSDate().getTime(), p.batteryVoltage])
-
     let collectedEnergy = powerDataList.map(p => [luxon.DateTime.fromISO(p.dateTime, {zone: "utc"}).toJSDate().getTime(), p.generatedEnergyToday])
+    let maxEnergy = Math.max(...collectedEnergy.map(e => e[1]))
 
-    Highcharts.setOptions({
-        time: {
-            timezone: 'Europe/Berlin'
-        }
-    });
-
-    Highcharts.chart('powerHistory', {
-        chart: {
-            backgroundColor: "none"
-        },
-        legend: {
-            enabled: false
-        },
+    let energyYAxis = {
+        height: "32%",
+        top: "68%",
         title: {
-            text: ""
+            text: "Collected Energy",
+            style: {color: "#ccc"}
         },
+        offset: 0,
+        gridLineColor: 'hsla(0, 0%, 40%, 0.3)',
+        labels: {
+            style: {color: "#ccc"}
+        },
+        tickInterval: maxEnergy < 2 ? 0.25 : 0.5,
+        plotLines: [{
+            color: "#ccc",
+            width: 1,
+            value: 0
+        }]
+    };
+    let baterryStatusYAxis = {
+        height: "32%",
+        top: "34%",
+        title: {
+            text: "Battery Voltage",
+            style: {color: "#ccc"}
+        },
+        offset: 0,
+        min: 25,
+        max: 28,
+        gridLineColor: 'hsla(0, 0%, 40%, 0.3)',
+        labels: {
+            style: {color: "#ccc"}
+        },
+        plotLines: [{
+            color: "#ccc",
+            width: 1,
+            value: 25
+        }]
+    };
+    let powerYAxis = {
+        height: "32%",
+        title: {
+            text: "PV Power",
+            style: {color: "#ccc"}
+        },
+        offset: 0,
+        gridLineColor: 'hsla(0, 0%, 40%, 0.3)',
+        labels: {
+            style: {color: "#ccc"}
+        },
+        plotLines: [{
+            color: "#ccc",
+            width: 1,
+            value: 0
+        }]
+    };
+    let powerSeries = {
+        type: "area",
+        yAxis: 0,
+        name: "PV Power",
+        data: solarPowers,
+        color: "hsl(30, 100%, 70%)",
+        fillColor: "hsla(30, 100%, 70%, 0.2)",
+        animation: false,
+    };
+    let batteryStatusSeries = {
+        type: "area",
+        yAxis: 1,
+        name: "Battery Voltage",
+        data: batteryVoltages,
+        color: "hsl(350, 100%, 70%)",
+        fillColor: "hsla(350, 100%, 70%,0.2)",
+        animation: false,
+    };
+    let energySeries = {
+        type: "area",
+        yAxis: 2,
+        name: "Collected Energy",
+        data: collectedEnergy,
+        color: "hsl(205, 100%, 70%)",
+        fillColor: "hsla(205, 100%, 70%, 0.2)",
+        animation: false,
+    };
+
+    Highcharts.chart('overviewChart', {
+        chart: {backgroundColor: "none"},
+        legend: {enabled: false},
+        title: {text: ""},
         xAxis: [{
             type: "datetime",
             gridLineWidth: 1,
             gridLineColor: 'hsla(0, 0%, 40%, 0.3)',
-            labels: {
-                style: {
-                    color: "#ccc"
-                }
-            },
+            labels: {style: {color: "#ccc"}},
+            tickLength: 0,
             lineWidth: 0
         }],
-        yAxis: [{
-            height: "25%",
-            title: {
-                text: "PV Power",
-                style: {
-                    color: "#ccc"
-                }
-            },
-            offset: 0,
-            gridLineColor: 'hsla(0, 0%, 40%, 0.3)',
-            labels: {
-                style: {
-                    color: "#ccc"
-                }
-            },
-            plotLines: [{
-                color: "#ccc",
-                width: 1,
-                value: 0
-            }]
-        }, {
-            height: "19%",
-            top: "27%",
-            title: {
-                text: "PV Voltage",
-                style: {
-                    color: "#ccc"
-                }
-            },
-            offset: 0,
-            gridLineColor: 'hsla(0, 0%, 40%, 0.3)',
-            labels: {
-                style: {
-                    color: "#ccc"
-                }
-            },
-            plotLines: [{
-                color: "#ccc",
-                width: 1,
-                value: 0
-            }]
-        }, {
-            height: "19%",
-            top: "27%",
-            title: {
-                text: "PV Current",
-                style: {
-                    color: "#ccc"
-                }
-            },
-            opposite: true,
-            offset: 0,
-            gridLineColor: 'hsla(0, 0%, 40%, 0.3)',
-            labels: {
-                style: {
-                    color: "#ccc"
-                }
-            },
-            plotLines: [{
-                color: "#ccc",
-                width: 1,
-                value: 0
-            }]
-        }, {
-            height: "25%",
-            top: "48%",
-            title: {
-                text: "Battery Voltage",
-                style: {
-                    color: "#ccc"
-                }
-            },
-            offset: 0,
-            min: 25,
-            max: 28,
-            gridLineColor: 'hsla(0, 0%, 40%, 0.3)',
-            labels: {
-                style: {
-                    color: "#ccc"
-                }
-            },
-            plotLines: [{
-                color: "#ccc",
-                width: 1,
-                value: 25
-            }]
-        }, {
-            height: "25%",
-            top: "75%",
-            title: {
-                text: "Collected Energy",
-                style: {
-                    color: "#ccc"
-                }
-            },
-            offset: 0,
-            gridLineColor: 'hsla(0, 0%, 40%, 0.3)',
-            labels: {
-                style: {
-                    color: "#ccc"
-                }
-            },
-            plotLines: [{
-                color: "#ccc",
-                width: 1,
-                value: 0
-            }]
-        }],
-        series: [{
-            type: "area",
-            yAxis: 0,
-            data: solarPowers,
-            color: "rgb(255, 199, 132)",
-            fillColor: "rgba(255, 199, 132, 0.2)",
-        }, {
-            type: "line",
-            yAxis: 1,
-            data: solarVoltages,
-            lineWidth: 1,
-        }, {
-            type: "line",
-            yAxis: 2,
-            data: solarCurrents,
-            lineWidth: 1,
-        }, {
-            type: "area",
-            yAxis: 3,
-            data: batteryVoltages,
-            color: "rgb(255, 99, 132)",
-            fillColor: "rgba(255, 99, 132, 0.2)",
-        }, {
-            type: "area",
-            yAxis: 4,
-            data: collectedEnergy,
-            color: "hsl(205, 20%, 55%)",
-            fillColor: "hsla(205, 20%, 55%, 0.2)",
-        }]
+        yAxis: [powerYAxis, baterryStatusYAxis, energyYAxis],
+        series: [powerSeries, batteryStatusSeries, energySeries]
     })
+
 }
 
 function showPowerDataSummary(powerData) {
@@ -196,5 +127,12 @@ function showPowerDataSummary(powerData) {
     document.getElementById("minimumBatteryVoltage").textContent = numberFormat.format(powerData.minimumBatteryVoltageToday);
 }
 
-loadAndDisplayData("/powerData/last24Hours", drawHistory);
+loadAndDisplayData("/powerData/last24Hours", drawOverviewChart);
 loadAndDisplayData("/powerData", showPowerDataSummary);
+
+Highcharts.setOptions({
+    time: {
+        timezone: 'Europe/Berlin'
+    }
+});
+

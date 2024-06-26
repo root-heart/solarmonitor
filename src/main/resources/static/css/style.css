@@ -4,25 +4,29 @@ html {
     font: 12px sans-serif;
 }
 
-.grid-container {
+#overview {
     display: grid;
-    grid-template-rows: repeat(3, 30%);
-    grid-gap: 1rem;
-    justify-content: center;
+    grid-template-areas: "power   chart"
+                         "battery chart"
+                         "energy  chart";
+    grid-template-columns: auto 1fr;
+    height: 95vh;
 }
 
-.measurementHistory {
-    height: 60rem;
-    display: grid;
-    grid-template-columns: 20rem calc(100% - 20rem);
+#pvInput {
+    grid-area: power;
 }
 
-.grid-container>div {
-    text-align: center;
+#batteryStatus {
+    grid-area: battery;
 }
 
-.grid-container>div>h1 {
-    font-size: 1rem;
+#currentEnergy {
+    grid-area: energy;
+}
+
+#overviewChart {
+    grid-area: chart;
 }
 
 span.currentValue {
