@@ -11,21 +11,52 @@
 <body>
 
 <div id="overview">
-    <div id="pvInput">
+    <div class="measurements" id="pvInput">
         <h1>PV Power</h1>
-        <span class="currentValue" id="currentPvPower"> Watt</span>
+
+        <div class="currentValue" id="currentPvPower"> Watt</div>
+
+        <div class="additionalValue">
+            <span class="label">Voltage</span>
+            <span class="value" id="pvVoltage"> Volt</span>
+        </div>
+
+        <div class="additionalValue">
+            <span class="label">Current</span>
+            <span class="value" id="pvCurrent"> Ampere</span>
+        </div>
     </div>
 
-    <div id="batteryStatus">
+    <div class="measurements" id="batteryStatus">
         <h1>Battery Status</h1>
-        <span class="minValueToday" id="minimumBatteryVoltage"> Volt</span>
-        <span class="currentValue" id="currentBatteryVoltage"> Volt</span>
-        <span class="maxValueToday" id="maximumBatteryVoltage"> Volt</span>
+
+        <div class="currentValue" id="currentBatteryVoltage"> Volt</div>
+
+        <div class="additionalValue">
+            <span class="label">Min</span>
+            <span class="value" id="minimumBatteryVoltage"> Volt</span>
+        </div>
+
+        <div class="additionalValue">
+            <span class="label">Max</span>
+            <span class="value" id="maximumBatteryVoltage"> Volt</span>
+        </div>
     </div>
 
-    <div id="currentEnergy">
+    <div class="measurements" id="currentEnergy">
         <h1>Collected Energy</h1>
-        <span class="currentValue" id="generatedEnergy"> kWh</span>
+
+        <div class="currentValue" id="generatedEnergy"> kWh</div>
+
+        <div class="additionalValue">
+            <span class="label">This Month</span>
+            <span class="value" id="generatedThisMonth"> kWh</span>
+        </div>
+
+        <div class="additionalValue">
+            <span class="label">This Year</span>
+            <span class="value" id="generatedThisYear"> kWh</span>
+        </div>
     </div>
 
     <div id="overviewChart"></div>

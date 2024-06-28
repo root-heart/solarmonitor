@@ -6,11 +6,11 @@ html {
 
 #overview {
     display: grid;
-    grid-template-areas: "power   chart"
-                         "battery chart"
-                         "energy  chart";
-    grid-template-columns: auto 1fr;
-    height: 95vh;
+    grid-template-areas: "chart power"
+                         "chart battery"
+                         "chart energy";
+    grid-template-columns: 1fr auto;
+    aspect-ratio: 2 / 1;
 }
 
 #pvInput {
@@ -29,18 +29,40 @@ html {
     grid-area: chart;
 }
 
-span.currentValue {
-    font-size: 4rem;
+.measurements {
+    display: grid;
+    grid-template-columns: 8rem auto;
+    grid-auto-rows: auto;
+    align-content: flex-start;
+    gap: 1rem;
 }
 
-span.minValueToday {
-    font-size: 2rem;
+.measurements > h1 {
+    grid-column: 1 / 3;
+    font-size: 2.2rem;
+    margin: 0;
 }
 
-span.maxValueToday {
-    font-size: 2rem;
+.measurements > .currentValue {
+    grid-column: 1 / 3;
+    font-size: 3rem;
+    justify-self: right;
 }
 
-#powerHistory {
-    height: 80vh;
+.measurements > .additionalValue {
+    grid-column: 1 / 3;
+    display: grid;
+    grid-template-columns: subgrid;
+    align-items: baseline;
+}
+
+.measurements > .additionalValue > .label {
+    grid-column: 1;
+    font-size: 1.2rem;
+    justify-self: right;
+}
+
+.measurements > .additionalValue > .value {
+    grid-column: 2;
+    font-size: 1.6rem;
 }

@@ -14,7 +14,6 @@ function drawOverviewChart(powerDataList) {
     let solarPowers = powerDataList.map(p => [luxon.DateTime.fromISO(p.dateTime, {zone: "utc"}).toJSDate().getTime(), p.solarPower])
     let batteryVoltages = powerDataList.map(p => [luxon.DateTime.fromISO(p.dateTime, {zone: "utc"}).toJSDate().getTime(), p.batteryVoltage])
     let collectedEnergy = powerDataList.map(p => [luxon.DateTime.fromISO(p.dateTime, {zone: "utc"}).toJSDate().getTime(), p.generatedEnergyToday])
-    let maxEnergy = Math.max(...collectedEnergy.map(e => e[1]))
 
     let energyYAxis = {
         height: "32%",
@@ -25,10 +24,7 @@ function drawOverviewChart(powerDataList) {
         },
         offset: 0,
         gridLineColor: 'hsla(0, 0%, 40%, 0.3)',
-        labels: {
-            style: {color: "#ccc"}
-        },
-        tickInterval: maxEnergy < 2 ? 0.25 : 0.5,
+        labels: {style: {color: "#ccc"}},
         plotLines: [{
             color: "#ccc",
             width: 1,
@@ -43,12 +39,9 @@ function drawOverviewChart(powerDataList) {
             style: {color: "#ccc"}
         },
         offset: 0,
-        min: 25,
-        max: 28,
+        min: 25, max: 28,
         gridLineColor: 'hsla(0, 0%, 40%, 0.3)',
-        labels: {
-            style: {color: "#ccc"}
-        },
+        labels: {style: {color: "#ccc"}},
         plotLines: [{
             color: "#ccc",
             width: 1,
@@ -63,9 +56,7 @@ function drawOverviewChart(powerDataList) {
         },
         offset: 0,
         gridLineColor: 'hsla(0, 0%, 40%, 0.3)',
-        labels: {
-            style: {color: "#ccc"}
-        },
+        labels: {style: {color: "#ccc"}},
         plotLines: [{
             color: "#ccc",
             width: 1,
@@ -120,19 +111,26 @@ function drawOverviewChart(powerDataList) {
 
 function showPowerDataSummary(powerData) {
     let numberFormat = new Intl.NumberFormat('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-    document.getElementById("currentPvPower").textContent = numberFormat.format(powerData.solarPower);
-    document.getElementById("generatedEnergy").textContent = numberFormat.format(powerData.generatedEnergyToday);
-    document.getElementById("currentBatteryVoltage").textContent = numberFormat.format(powerData.batteryVoltage);
-    document.getElementById("maximumBatteryVoltage").textContent = numberFormat.format(powerData.maximumBatteryVoltageToday);
-    document.getElementById("minimumBatteryVoltage").textContent = numberFormat.format(powerData.minimumBatteryVoltageToday);
+
+    document.getElementById("currentPvPower").textContent = `${numberFormat.format(powerData.solarPower)} W`;
+    document.getElementById("pvVoltage").textContent = `${numberFormat.format(powerData.solarVoltage)} V`;
+    document.getElementById("pvCurrent").textContent = `${numberFormat.format(powerData.solarCurrent)} A`;
+
+    document.getElementById("currentBatteryVoltage").textContent = `${numberFormat.format(powerData.batteryVoltage)} V`;
+    document.getElementById("maximumBatteryVoltage").textContent = `${numberFormat.format(powerData.maximumBatteryVoltageToday)} V`;
+    document.getElementById("minimumBatteryVoltage").textContent = `${numberFormat.format(powerData.minimumBatteryVoltageToday)} V`;
+
+    document.getElementById("generatedEnergy").textContent = `${numberFormat.format(powerData.generatedEnergyToday)} kWh`;
+    document.getElementById("generatedThisMonth").textContent = `${numberFormat.format(powerData.generatedEnergyThisMonth)} kWh`;
+    document.getElementById("generatedThisYear").textContent = `${numberFormat.format(powerData.generatedEnergyThisYear)} kWh`;
+
 }
 
 loadAndDisplayData("/powerData/last24Hours", drawOverviewChart);
 loadAndDisplayData("/powerData", showPowerDataSummary);
 
 Highcharts.setOptions({
-    time: {
-        timezone: 'Europe/Berlin'
-    }
+    time: {timezone: 'Europe/Berlin'},
+    credits: {enabled: false},
 });
 
